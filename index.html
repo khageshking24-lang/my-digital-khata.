@@ -1,135 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khagesh ai-nexa | Ultimate Khata Pro</title>
+    <title>Nexa Khata Pro | Khagesh ai-nexa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; }
-        .gradient-text { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        :root { --bg: #0f172a; --card: rgba(30, 41, 59, 0.7); --text: #ffffff; }
+        .light-mode { --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; transition: 0.3s; }
+        .glass { background: var(--card); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
+        #qrcode img { margin: 0 auto; border: 10px solid white; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-10 min-h-screen">
+<body class="p-4 max-w-md mx-auto pb-32">
 
-    <div class="max-w-md mx-auto">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h1 class="text-2xl font-extrabold tracking-tighter gradient-text">Khagesh ai-nexa</h1>
-                <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest italic">Professional Ledger</p>
-            </div>
-            <div class="text-right">
-                <div id="liveClock" class="text-xl font-black text-white">00:00:00</div>
-                <div id="liveDate" class="text-[8px] text-sky-400 font-bold uppercase">21 Jan 2026</div>
-            </div>
-        </div>
-
-        <div class="bg-slate-900 rounded-[2.5rem] p-8 border border-white/10 shadow-2xl mb-8">
-            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Net Balance</p>
-            <h2 id="mainBalance" class="text-5xl font-black mt-2 tracking-tighter text-sky-400 italic">₹ 0</h2>
-            <div class="mt-8 grid grid-cols-2 gap-3 text-center">
-                <div class="bg-emerald-500/10 p-3 rounded-2xl"><p class="text-[8px] text-emerald-400 font-bold uppercase">In</p><p id="totalIn" class="text-lg font-bold">₹ 0</p></div>
-                <div class="bg-rose-500/10 p-3 rounded-2xl"><p class="text-[8px] text-rose-400 font-bold uppercase">Out</p><p id="totalOut" class="text-lg font-bold">₹ 0</p></div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mb-10">
-            <button onclick="openModal('income')" class="bg-emerald-600 p-5 rounded-3xl font-black shadow-lg active:scale-95 transition-all">CASH IN (+)</button>
-            <button onclick="openModal('expense')" class="bg-rose-600 p-5 rounded-3xl font-black shadow-lg active:scale-95 transition-all">CASH OUT (-)</button>
-        </div>
-
-        <div id="ledgerItems" class="space-y-4 pb-10"></div>
+    <div class="flex justify-between items-center mb-6 pt-2">
+        <button onclick="toggleTheme()" class="bg-emerald-500 text-white px-4 py-1 rounded-full text-[10px] font-black italic shadow-lg">
+            <i class="fas fa-adjust"></i> THEME
+        </button>
+        <div id="clock" class="text-xs font-mono opacity-60 font-bold tracking-tighter italic">00:00:00</div>
+        <button onclick="exportKhata()" class="bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black shadow-lg">
+            <i class="fas fa-file-download"></i> BACKUP
+        </button>
     </div>
 
-    <div id="modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl hidden flex items-center justify-center p-6 z-50">
-        <div class="bg-slate-900 p-8 rounded-[3rem] w-full max-w-sm border border-slate-700">
-            <h2 id="modalTitle" class="text-2xl font-black mb-6 text-sky-400 italic">Add Entry</h2>
-            <div class="space-y-4">
-                <input id="eName" type="text" placeholder="Name" class="w-full bg-slate-800 p-4 rounded-2xl outline-none">
-                <input id="ePhone" type="number" placeholder="Phone (WhatsApp)" class="w-full bg-slate-800 p-4 rounded-2xl outline-none">
-                <input id="eDesc" type="text" placeholder="Description" class="w-full bg-slate-800 p-4 rounded-2xl outline-none">
-                <input id="eAmount" type="number" placeholder="Amount ₹" class="w-full bg-slate-800 p-4 rounded-2xl font-bold text-xl outline-none">
-            </div>
-            <div class="flex gap-4 mt-8">
-                <button onclick="closeModal()" class="flex-1 text-slate-500 font-bold">Cancel</button>
-                <button onclick="saveEntry()" class="flex-[2] bg-sky-500 p-4 rounded-2xl font-black">Confirm</button>
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-black italic tracking-tighter text-emerald-500">NEXA <span class="text-inherit opacity-80 underline">KHATA</span></h1>
+        <p class="text-[8px] uppercase tracking-[5px] opacity-50 mt-1">Smart Ledger by Khagesh ai-nexa</p>
+    </div>
+
+    <div class="glass p-6 mb-8 border-b-4 border-emerald-500 shadow-2xl">
+        <div class="flex justify-between items-center mb-4">
+            <p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Net Balance</p>
+            <button onclick="showQR()" class="text-emerald-500 bg-emerald-500/10 p-2 rounded-lg"><i class="fas fa-qrcode"></i></button>
+        </div>
+        <h2 id="totalBalance" class="text-5xl font-black italic tracking-tighter">₹ 0</h2>
+    </div>
+
+    <div class="glass p-6 mb-8">
+        <div class="space-y-4">
+            <input type="text" id="custName" placeholder="Customer Name" class="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none">
+            <input type="tel" id="custPhone" placeholder="Mobile Number" class="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none">
+            <input type="number" id="amt" placeholder="Amount ₹" class="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none font-bold text-emerald-500">
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="addEntry('GAVE')" class="bg-rose-600 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95">You Gave</button>
+                <button onclick="addEntry('GOT')" class="bg-emerald-600 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95">You Got</button>
             </div>
         </div>
     </div>
+
+    <div id="ledgerList" class="space-y-3"></div>
+
+    <div id="qrModal" class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center p-6">
+        <div class="bg-white p-8 rounded-3xl text-center w-full">
+            <div id="qrcode" class="mb-4"></div>
+            <p class="text-black font-black italic text-sm mb-4">Nexa Khata Balance QR</p>
+            <button onclick="closeQR()" class="bg-rose-500 text-white px-8 py-2 rounded-xl font-bold">Close</button>
+        </div>
+    </div>
+
+    <footer class="fixed bottom-0 left-0 w-full p-8 bg-inherit backdrop-blur-md text-center border-t border-white/5">
+        <h2 class="text-xl font-black italic opacity-80">Khagesh <span class="text-emerald-500">ai-nexa</span></h2>
+        <p class="text-[7px] font-bold opacity-40 tracking-[6px] uppercase mt-1">Next-Gen Business Solutions</p>
+    </footer>
 
     <script>
-        let currentType = '';
-        let records = JSON.parse(localStorage.getItem('kh_ledger_v5')) || [];
-
         function updateClock() {
-            const now = new Date();
-            document.getElementById('liveClock').innerText = now.toLocaleTimeString('en-IN', { hour12: false });
-            document.getElementById('liveDate').innerText = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-IN', {hour12: false});
         }
         setInterval(updateClock, 1000); updateClock();
 
-        function openModal(type) { currentType = type; document.getElementById('modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+        let entries = JSON.parse(localStorage.getItem('nexa_khata_v2')) || [];
 
-        function saveEntry() {
-            const name = document.getElementById('eName').value;
-            const amount = parseFloat(document.getElementById('eAmount').value);
-            if(!name || !amount) return;
-            
-            records.push({ 
-                id: Date.now(), 
-                name, 
-                phone: document.getElementById('ePhone').value || '', 
-                desc: document.getElementById('eDesc').value || 'N/A', 
-                amount, 
-                type: currentType, 
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
-            });
-            
-            localStorage.setItem('kh_ledger_v5', JSON.stringify(records));
-            ['eName', 'ePhone', 'eDesc', 'eAmount'].forEach(id => document.getElementById(id).value = '');
-            closeModal(); render();
+        function addEntry(type) {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const amount = document.getElementById('amt').value;
+
+            if(!name || !amount) return alert("Details bhariye!");
+
+            const entry = {
+                id: Date.now(),
+                name, phone, amount: parseFloat(amount), type,
+                date: new Date().toLocaleDateString('en-IN'),
+                time: new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'})
+            };
+
+            entries.unshift(entry);
+            localStorage.setItem('nexa_khata_v2', JSON.stringify(entries));
+            render();
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('amt').value = '';
         }
 
-        // DELETE FUNCTION
+        function render() {
+            const list = document.getElementById('ledgerList');
+            let total = 0;
+            list.innerHTML = '';
+
+            entries.forEach(e => {
+                total += (e.type === 'GOT' ? -e.amount : e.amount);
+                const card = document.createElement('div');
+                card.className = "glass p-5 flex justify-between items-center";
+                card.innerHTML = `
+                    <div>
+                        <h4 class="font-bold text-lg leading-tight">${e.name}</h4>
+                        <p class="text-[8px] opacity-50 uppercase font-black">${e.date} | ${e.time}</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="text-right">
+                            <p class="text-lg font-black ${e.type === 'GOT' ? 'text-emerald-500' : 'text-rose-500'}">₹${e.amount}</p>
+                            <p class="text-[7px] font-bold opacity-40 uppercase">${e.type === 'GOT' ? 'Received' : 'Given'}</p>
+                        </div>
+                        <button onclick="shareWA(${e.id})" class="text-emerald-500 p-2 bg-emerald-500/10 rounded-lg"><i class="fab fa-whatsapp"></i></button>
+                        <button onclick="deleteEntry(${e.id})" class="text-rose-500 p-2 bg-rose-500/10 rounded-lg"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            document.getElementById('totalBalance').innerText = `₹ ${total}`;
+            document.getElementById('totalBalance').className = `text-5xl font-black italic tracking-tighter ${total >= 0 ? 'text-rose-500' : 'text-emerald-500'}`;
+        }
+
+        function toggleTheme() { document.body.classList.toggle('light-mode'); }
+
+        function showQR() {
+            const balance = document.getElementById('totalBalance').innerText;
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), { text: `Khata Balance for Khagesh ai-nexa: ${balance}`, width: 200, height: 200 });
+            document.getElementById('qrModal').classList.remove('hidden');
+        }
+
+        function closeQR() { document.getElementById('qrModal').classList.add('hidden'); }
+
+        function shareWA(id) {
+            const e = entries.find(x => x.id === id);
+            const msg = `*KHATA REMINDER*%0A*Name:* ${e.name}%0A*Amount:* ₹${e.amount}%0A*Status:* ${e.type === 'GAVE' ? 'Paisa Dena Hai' : 'Paisa Mil Gaya'}%0A---%0A_Digital Ledger by Khagesh ai-nexa_`;
+            window.open(`https://wa.me/91${e.phone}?text=${msg}`);
+        }
+
+        function exportKhata() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(entries));
+            const dl = document.createElement('a');
+            dl.setAttribute("href", dataStr);
+            dl.setAttribute("download", "khata_backup.json");
+            dl.click();
+        }
+
         function deleteEntry(id) {
-            if(confirm("Kya aap is entry ko hatana chahte hain?")) {
-                records = records.filter(item => item.id !== id);
-                localStorage.setItem('kh_ledger_v5', JSON.stringify(records));
+            if(confirm("Entry delete karein?")) {
+                entries = entries.filter(e => e.id !== id);
+                localStorage.setItem('nexa_khata_v2', JSON.stringify(entries));
                 render();
             }
         }
 
-        function shareWA(name, amount, type, phone) {
-            if(!phone) return alert("Number nahi mila!");
-            const msg = `*Khagesh ai-nexa Update*\nHeir: ${name}\nAmount: ₹${amount}\nType: ${type.toUpperCase()}\nStatus: Settled`;
-            window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`);
-        }
-
-        function render() {
-            const list = document.getElementById('ledgerItems');
-            let tIn = 0, tOut = 0; list.innerHTML = '';
-            records.slice().reverse().forEach(item => {
-                if(item.type === 'income') tIn += item.amount; else tOut += item.amount;
-                list.innerHTML += `
-                    <div class="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 relative group">
-                        <button onclick="deleteEntry(${item.id})" class="absolute top-4 right-4 text-rose-500 hover:text-rose-400 text-[10px] font-bold uppercase">Delete</button>
-                        <div class="flex justify-between items-start mb-3">
-                            <div><h4 class="font-bold text-white">${item.name}</h4><p class="text-[9px] text-slate-500 uppercase">${item.desc}</p></div>
-                            <p class="font-black ${item.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}">₹${item.amount}</p>
-                        </div>
-                        <div class="flex gap-2 pt-3 border-t border-white/5">
-                            <button onclick="shareWA('${item.name}', '${item.amount}', '${item.type}', '${item.phone}')" class="flex-1 bg-emerald-500/10 text-emerald-400 py-2 rounded-xl text-[9px] font-bold">WHATSAPP</button>
-                            <a href="tel:${item.phone}" class="flex-1 bg-sky-500/10 text-sky-400 py-2 rounded-xl text-[9px] font-bold text-center">CALL</a>
-                        </div>
-                    </div>`;
-            });
-            document.getElementById('mainBalance').innerText = `₹ ${tIn - tOut}`;
-            document.getElementById('totalIn').innerText = `₹ ${tIn}`; document.getElementById('totalOut').innerText = `₹ ${tOut}`;
-        }
         render();
     </script>
 </body>
-    </html>
-    
+</html>
