@@ -1,91 +1,114 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa AI - Digital Ledger</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Khagesh ai-nexa | Digital Khata Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .app-card { background: white; width: 100%; max-width: 360px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden; border: 1px solid #ddd; }
-        .header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 25px; text-align: center; }
-        .balance-section { background: #27ae60; color: white; margin: 20px; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3); }
-        .feature-box { border: 2px dashed #bdc3c7; margin: 20px; padding: 15px; border-radius: 15px; position: relative; transition: 0.3s; }
-        .locked { filter: blur(4px); opacity: 0.6; pointer-events: none; }
-        .status-badge { text-align: center; font-weight: bold; padding: 10px; font-size: 13px; border-radius: 5px; margin: 0 20px; }
-        .btn { display: block; width: 85%; margin: 15px auto; padding: 14px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-main { background: #3498db; color: white; }
-        .btn-premium { background: #8e44ad; color: white; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #020617; color: white; }
+        .neon-border { border: 1px solid rgba(56, 189, 248, 0.3); box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
+        .gradient-text { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-10 min-h-screen">
 
-<div class="app-card">
-    <div class="header">
-        <h2 style="margin:0;">Khagesh ai-nexa</h2>
-        <p style="margin:5px 0 0; opacity:0.8;">Smart Digital Ledger</p>
+    <div class="max-w-md mx-auto">
+        <div class="text-center mb-6">
+            <h1 class="text-4xl font-extrabold tracking-tighter gradient-text">Khagesh ai-nexa</h1>
+            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-1">Digital Khata Pro</p>
+        </div>
+
+        <div class="text-center mb-8 bg-slate-900/50 py-4 rounded-3xl border border-white/5">
+            <div id="liveClock" class="text-4xl font-black tracking-widest text-white drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]">00:00:00</div>
+            <div id="liveDate" class="text-[10px] font-bold text-sky-400 uppercase tracking-[0.2em] mt-1 italic">Loading Date...</div>
+        </div>
+
+        <div class="bg-slate-900 rounded-[2.5rem] p-8 neon-border mb-8">
+            <p class="text-slate-400 text-xs font-bold uppercase">Total Balance</p>
+            <h2 id="mainBalance" class="text-5xl font-black mt-2 tracking-tighter italic text-sky-400">₹ 0</h2>
+            <div class="mt-8 grid grid-cols-2 gap-4">
+                <div class="bg-slate-800/40 p-3 rounded-2xl">
+                    <p class="text-[9px] text-emerald-400 font-bold">CASH IN (+)</p>
+                    <p id="totalIn" class="text-lg font-bold">₹ 0</p>
+                </div>
+                <div class="bg-slate-800/40 p-3 rounded-2xl">
+                    <p class="text-[9px] text-rose-400 font-bold">CASH OUT (-)</p>
+                    <p id="totalOut" class="text-lg font-bold">₹ 0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-10">
+            <button onclick="openModal('income')" class="bg-emerald-600 p-5 rounded-3xl font-black text-white shadow-lg active:scale-95 transition-all">GAI (IN)</button>
+            <button onclick="openModal('expense')" class="bg-rose-600 p-5 rounded-3xl font-black text-white shadow-lg active:scale-95 transition-all">DIYA (OUT)</button>
+        </div>
+
+        <div id="ledgerItems" class="space-y-4"></div>
     </div>
 
-    <div class="balance-section">
-        <p style="margin:0; font-size:14px;">Current Balance</p>
-        <h1 id="balance" style="margin:5px 0 0;">₹ 0</h1>
+    <div id="modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-6 z-50">
+        <div class="bg-slate-900 p-8 rounded-[3rem] w-full max-w-sm border border-slate-700">
+            <h2 id="modalTitle" class="text-2xl font-black mb-6">New Entry</h2>
+            <input id="entryName" type="text" placeholder="Description / Name" class="w-full bg-slate-800 p-4 rounded-2xl mb-4 text-white outline-none focus:ring-2 focus:ring-sky-500">
+            <input id="entryAmount" type="number" placeholder="Amount ₹" class="w-full bg-slate-800 p-4 rounded-2xl mb-6 text-white font-bold outline-none focus:ring-2 focus:ring-sky-500 text-xl">
+            <div class="flex gap-3">
+                <button onclick="closeModal()" class="flex-1 text-slate-400 font-bold">Cancel</button>
+                <button onclick="saveEntry()" class="flex-[2] bg-sky-500 p-4 rounded-2xl font-black">Save</button>
+            </div>
+        </div>
     </div>
 
-    <div id="premium-area" class="feature-box locked">
-        <div style="position:absolute; top:40%; left:25%; color:#c0392b; font-weight:bold; z-index:10;" id="lock-label">🔒 Locked Feature</div>
-        <p style="margin:0;">📄 <b>Invoice PDF Download</b></p>
-        <button class="btn btn-premium">Generate Invoice</button>
-    </div>
+    <script>
+        let currentType = '';
+        let records = JSON.parse(localStorage.getItem('kh_khata_pro')) || [];
 
-    <div id="status" class="status-badge" style="color: #e67e22; background: #fff3e0;">
-        🔄 Connecting to Nexa AI...
-    </div>
+        // LIVE CLOCK LOGIC
+        function updateClock() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('liveClock').innerText = `${h}:${m}:${s}`;
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById('liveDate').innerText = now.toLocaleDateString('en-IN', options);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    <button class="btn btn-main" style="margin-top:20px; background:#2c3e50;" onclick="alert('Starting balance is 0 as per business rules.')">
-        + Add New Transaction
-    </button>
-</div>
-
-<script>
-    // Supabase Configuration (Aapki Keys Fit kar di hain)
-    const supabaseUrl = 'https://onlbikroyrgmolyxbbl.supabase.co'; 
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ubGJpa3JveXJnbW9seWJ4YmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5NzQ0NzIsImV4cCI6MjA4NDU1MDQ3Mn0.8R_YdbdMeDQ0qn0j-3TOs6KRWR9k4WWxExCnBYOIFEM';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-    async function syncNexaApp() {
-        const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', 1)
-            .single();
-
-        if (error) {
-            document.getElementById('status').innerText = "⚠️ Connection Error";
-            return;
+        // APP LOGIC
+        function openModal(type) {
+            currentType = type;
+            document.getElementById('modalTitle').innerText = type === 'income' ? 'Cash Received' : 'Cash Paid';
+            document.getElementById('modal').classList.remove('hidden');
         }
 
-        if (data) {
-            // Balance Update
-            document.getElementById('balance').innerText = "₹ " + data.balance;
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
-            // Premium Logic
-            if (data.is_premium === true) {
-                document.getElementById('premium-area').classList.remove('locked');
-                document.getElementById('lock-label').style.display = 'none';
-                document.getElementById('status').innerText = "✅ Premium Active";
-                document.getElementById('status').style.color = "green";
-                document.getElementById('status').style.background = "#e8f5e9";
-            } else {
-                document.getElementById('status').innerText = "❌ Subscription Expired: Pay ₹499";
-                document.getElementById('status').style.color = "#c0392b";
-            }
+        function saveEntry() {
+            const name = document.getElementById('entryName').value;
+            const amount = parseFloat(document.getElementById('entryAmount').value);
+            if(!name || !amount) return;
+            records.push({ name, amount, type: currentType, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            localStorage.setItem('kh_khata_pro', JSON.stringify(records));
+            document.getElementById('entryName').value = ''; document.getElementById('entryAmount').value = '';
+            closeModal(); render();
         }
-    }
 
-    // Har 5 second mein update check karega
-    syncNexaApp();
-    setInterval(syncNexaApp, 5000);
-</script>
-
+        function render() {
+            const list = document.getElementById('ledgerItems');
+            let tIn = 0, tOut = 0;
+            list.innerHTML = '';
+            records.slice().reverse().forEach(item => {
+                if(item.type === 'income') tIn += item.amount; else tOut += item.amount;
+                list.innerHTML += `<div class="bg-slate-900/50 p-5 rounded-[2rem] border border-white/5 flex justify-between items-center"><div class="flex items-center gap-4"><div class="${item.type === 'income' ? 'text-emerald-500' : 'text-rose-500'} font-black uppercase text-xs">${item.type === 'income' ? 'IN' : 'OUT'}</div><div><p class="font-bold text-slate-200">${item.name}</p><p class="text-[9px] text-slate-500 font-bold uppercase">${item.time}</p></div></div><p class="font-black text-lg ${item.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}">${item.type === 'income' ? '+' : '-'} ₹${item.amount}</p></div>`;
+            });
+            document.getElementById('mainBalance').innerText = `₹ ${tIn - tOut}`;
+            document.getElementById('totalIn').innerText = `₹ ${tIn}`;
+            document.getElementById('totalOut').innerText = `₹ ${tOut}`;
+        }
+        render();
+    </script>
 </body>
 </html>
