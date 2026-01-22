@@ -3,165 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexa Khata Pro | Khagesh ai-nexa</title>
+    <title>Digital Khata | Nexa AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root { --bg: #0f172a; --card: rgba(30, 41, 59, 0.7); --text: #ffffff; }
-        .light-mode { --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; transition: 0.3s; }
-        .glass { background: var(--card); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
-        #qrcode img { margin: 0 auto; border: 10px solid white; border-radius: 10px; }
+        :root { --nexa: #f59e0b; --bg: #050505; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; }
+        .card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; }
+        .btn-give { background: #ef4444; color: white; }
+        .btn-take { background: #10b981; color: white; }
     </style>
 </head>
 <body class="p-4 max-w-md mx-auto pb-32">
 
-    <div class="flex justify-between items-center mb-6 pt-2">
-        <button onclick="toggleTheme()" class="bg-emerald-500 text-white px-4 py-1 rounded-full text-[10px] font-black italic shadow-lg">
-            <i class="fas fa-adjust"></i> THEME
-        </button>
-        <div id="clock" class="text-xs font-mono opacity-60 font-bold tracking-tighter italic">00:00:00</div>
-        <button onclick="exportKhata()" class="bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black shadow-lg">
-            <i class="fas fa-file-download"></i> BACKUP
-        </button>
-    </div>
-
-    <div class="text-center mb-8">
-        <h1 class="text-4xl font-black italic tracking-tighter text-emerald-500">NEXA <span class="text-inherit opacity-80 underline">KHATA</span></h1>
-        <p class="text-[8px] uppercase tracking-[5px] opacity-50 mt-1">Smart Ledger by Khagesh ai-nexa</p>
-    </div>
-
-    <div class="glass p-6 mb-8 border-b-4 border-emerald-500 shadow-2xl">
-        <div class="flex justify-between items-center mb-4">
-            <p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Net Balance</p>
-            <button onclick="showQR()" class="text-emerald-500 bg-emerald-500/10 p-2 rounded-lg"><i class="fas fa-qrcode"></i></button>
+    <div class="flex justify-between items-center mb-8 pt-4">
+        <div>
+            <h1 class="text-2xl font-black italic tracking-tighter uppercase">Digital <span class="text-amber-500">Khata</span></h1>
+            <p id="liveTime" class="text-[9px] font-bold opacity-30 mt-1 uppercase tracking-widest"></p>
         </div>
-        <h2 id="totalBalance" class="text-5xl font-black italic tracking-tighter">₹ 0</h2>
+        <div class="text-right">
+            <p class="text-[8px] font-black opacity-40 uppercase tracking-widest">Powered By</p>
+            <p class="text-[10px] font-bold text-amber-500">Khagesh ai-nexa</p>
+        </div>
     </div>
 
-    <div class="glass p-6 mb-8">
-        <div class="space-y-4">
-            <input type="text" id="custName" placeholder="Customer Name" class="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none">
-            <input type="tel" id="custPhone" placeholder="Mobile Number" class="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none">
-            <input type="number" id="amt" placeholder="Amount ₹" class="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none font-bold text-emerald-500">
-            
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="addEntry('GAVE')" class="bg-rose-600 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95">You Gave</button>
-                <button onclick="addEntry('GOT')" class="bg-emerald-600 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95">You Got</button>
+    <div class="card p-6 mb-6 border-b-4 border-amber-500">
+        <p class="text-[10px] font-black opacity-40 uppercase mb-2">Net Balance</p>
+        <h2 id="totalBalance" class="text-4xl font-black italic">₹ 0</h2>
+    </div>
+
+    <div class="card p-6 mb-8">
+        <h3 class="text-[10px] font-black uppercase mb-4 text-amber-500">New Entry</h3>
+        <input type="text" id="custName" placeholder="Customer Name" class="w-full p-3 bg-white/5 rounded-xl mb-3 text-xs border border-white/5 outline-none">
+        <input type="number" id="amt" placeholder="Amount ₹" class="w-full p-3 bg-white/5 rounded-xl mb-3 text-xs border border-white/5 outline-none">
+        
+        <textarea id="desc" placeholder="Item Name / Remarks (e.g. 2kg Sugar, Service Fee)" class="w-full p-3 h-16 bg-white/5 rounded-xl mb-4 text-xs border border-white/5 outline-none"></textarea>
+        
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="addEntry('GAVE')" class="btn-give py-3 rounded-xl font-black text-[10px] uppercase">You Gave</button>
+            <button onclick="addEntry('TOOK')" class="btn-take py-3 rounded-xl font-black text-[10px] uppercase">You Got</button>
+        </div>
+    </div>
+
+    <div id="entryList" class="space-y-4"></div>
+
+    <div class="fixed bottom-0 left-0 w-full p-4 bg-black/80 backdrop-blur-xl border-t border-white/5">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <button onclick="exportJSON()" class="text-[9px] font-bold opacity-40 uppercase hover:text-amber-500 transition">
+                <i class="fas fa-cloud-download-alt mr-1"></i> Backup Data
+            </button>
+            <div class="text-right">
+                <p class="text-[8px] opacity-30 uppercase font-black">Support: 8882737014</p>
             </div>
         </div>
     </div>
 
-    <div id="ledgerList" class="space-y-3"></div>
-
-    <div id="qrModal" class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center p-6">
-        <div class="bg-white p-8 rounded-3xl text-center w-full">
-            <div id="qrcode" class="mb-4"></div>
-            <p class="text-black font-black italic text-sm mb-4">Nexa Khata Balance QR</p>
-            <button onclick="closeQR()" class="bg-rose-500 text-white px-8 py-2 rounded-xl font-bold">Close</button>
-        </div>
-    </div>
-
-    <footer class="fixed bottom-0 left-0 w-full p-8 bg-inherit backdrop-blur-md text-center border-t border-white/5">
-        <h2 class="text-xl font-black italic opacity-80">Khagesh <span class="text-emerald-500">ai-nexa</span></h2>
-        <p class="text-[7px] font-bold opacity-40 tracking-[6px] uppercase mt-1">Next-Gen Business Solutions</p>
-    </footer>
-
     <script>
-        function updateClock() {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-IN', {hour12: false});
-        }
-        setInterval(updateClock, 1000); updateClock();
-
-        let entries = JSON.parse(localStorage.getItem('nexa_khata_v2')) || [];
+        // Starting Amount is 0
+        let khata = JSON.parse(localStorage.getItem('nexa_khata_db')) || [];
 
         function addEntry(type) {
             const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
             const amount = document.getElementById('amt').value;
+            const note = document.getElementById('desc').value;
 
-            if(!name || !amount) return alert("Details bhariye!");
+            if(name && amount) {
+                const entry = {
+                    id: Date.now(),
+                    name,
+                    amount: parseInt(amount),
+                    note: note || "No details",
+                    type,
+                    time: new Date().toLocaleString()
+                };
+                khata.unshift(entry);
+                save();
+                clearInputs();
+            }
+        }
 
-            const entry = {
-                id: Date.now(),
-                name, phone, amount: parseFloat(amount), type,
-                date: new Date().toLocaleDateString('en-IN'),
-                time: new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'})
-            };
-
-            entries.unshift(entry);
-            localStorage.setItem('nexa_khata_v2', JSON.stringify(entries));
+        function save() {
+            localStorage.setItem('nexa_khata_db', JSON.stringify(khata));
             render();
-            document.getElementById('custName').value = '';
-            document.getElementById('custPhone').value = '';
-            document.getElementById('amt').value = '';
         }
 
         function render() {
-            const list = document.getElementById('ledgerList');
+            const list = document.getElementById('entryList');
             let total = 0;
             list.innerHTML = '';
 
-            entries.forEach(e => {
-                total += (e.type === 'GOT' ? -e.amount : e.amount);
-                const card = document.createElement('div');
-                card.className = "glass p-5 flex justify-between items-center";
-                card.innerHTML = `
-                    <div>
-                        <h4 class="font-bold text-lg leading-tight">${e.name}</h4>
-                        <p class="text-[8px] opacity-50 uppercase font-black">${e.date} | ${e.time}</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="text-right">
-                            <p class="text-lg font-black ${e.type === 'GOT' ? 'text-emerald-500' : 'text-rose-500'}">₹${e.amount}</p>
-                            <p class="text-[7px] font-bold opacity-40 uppercase">${e.type === 'GOT' ? 'Received' : 'Given'}</p>
+            khata.forEach(item => {
+                if(item.type === 'TOOK') total += item.amount;
+                else total -= item.amount;
+
+                list.innerHTML += `
+                    <div class="card p-4 flex justify-between items-center">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-black uppercase italic">${item.name}</span>
+                                <span class="text-[8px] opacity-30 font-bold">${item.time}</span>
+                            </div>
+                            <p class="text-[10px] text-amber-500/80 mt-1"><i class="fas fa-tag mr-1 text-[8px]"></i>${item.note}</p>
                         </div>
-                        <button onclick="shareWA(${e.id})" class="text-emerald-500 p-2 bg-emerald-500/10 rounded-lg"><i class="fab fa-whatsapp"></i></button>
-                        <button onclick="deleteEntry(${e.id})" class="text-rose-500 p-2 bg-rose-500/10 rounded-lg"><i class="fas fa-trash"></i></button>
+                        <div class="text-right">
+                            <p class="text-sm font-black ${item.type === 'TOOK' ? 'text-emerald-500' : 'text-rose-500'}">
+                                ${item.type === 'TOOK' ? '+' : '-'} ₹${item.amount}
+                            </p>
+                            <button onclick="deleteEntry(${item.id})" class="text-[8px] opacity-20 hover:opacity-100 uppercase mt-1">Delete</button>
+                        </div>
                     </div>
                 `;
-                list.appendChild(card);
             });
 
-            document.getElementById('totalBalance').innerText = `₹ ${total}`;
-            document.getElementById('totalBalance').className = `text-5xl font-black italic tracking-tighter ${total >= 0 ? 'text-rose-500' : 'text-emerald-500'}`;
-        }
-
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
-
-        function showQR() {
-            const balance = document.getElementById('totalBalance').innerText;
-            document.getElementById('qrcode').innerHTML = '';
-            new QRCode(document.getElementById('qrcode'), { text: `Khata Balance for Khagesh ai-nexa: ${balance}`, width: 200, height: 200 });
-            document.getElementById('qrModal').classList.remove('hidden');
-        }
-
-        function closeQR() { document.getElementById('qrModal').classList.add('hidden'); }
-
-        function shareWA(id) {
-            const e = entries.find(x => x.id === id);
-            const msg = `*KHATA REMINDER*%0A*Name:* ${e.name}%0A*Amount:* ₹${e.amount}%0A*Status:* ${e.type === 'GAVE' ? 'Paisa Dena Hai' : 'Paisa Mil Gaya'}%0A---%0A_Digital Ledger by Khagesh ai-nexa_`;
-            window.open(`https://wa.me/91${e.phone}?text=${msg}`);
-        }
-
-        function exportKhata() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(entries));
-            const dl = document.createElement('a');
-            dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", "khata_backup.json");
-            dl.click();
+            document.getElementById('totalBalance').innerText = '₹ ' + total.toLocaleString('en-IN');
+            document.getElementById('totalBalance').className = `text-4xl font-black italic ${total >= 0 ? 'text-emerald-500' : 'text-rose-500'}`;
         }
 
         function deleteEntry(id) {
-            if(confirm("Entry delete karein?")) {
-                entries = entries.filter(e => e.id !== id);
-                localStorage.setItem('nexa_khata_v2', JSON.stringify(entries));
-                render();
-            }
+            khata = khata.filter(x => x.id !== id);
+            save();
         }
+
+        function clearInputs() {
+            document.getElementById('custName').value = '';
+            document.getElementById('amt').value = '';
+            document.getElementById('desc').value = '';
+        }
+
+        function exportJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(khata));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "khata_backup.json");
+            dlAnchorElem.click();
+        }
+
+        setInterval(() => {
+            document.getElementById('liveTime').innerText = new Date().toLocaleTimeString();
+        }, 1000);
 
         render();
     </script>
 </body>
-</html>
+                </html>
+                
