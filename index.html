@@ -3,120 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Khata Pro | Khagesh ai-nexa</title>
+    <title>Digital Khata | Khagesh ai-nexa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #000; color: white; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; }
-        .emerald-glow { border-left: 4px solid #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.05); }
+        :root { --bg: #ffffff; --text: #000000; --card: #f8fafc; --border: rgba(0,0,0,0.1); }
+        .dark-mode { --bg: #0f172a; --text: #ffffff; --card: #1e293b; --border: rgba(255,255,255,0.1); }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; transition: 0.3s; min-height: 100vh; }
+        .glass-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; }
+        .khata-box { background: linear-gradient(135deg, #059669, #10b981); color: white; border-radius: 24px; }
+        .hidden { display: none; }
+        .trial-tag { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+        .active-tag { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
     </style>
 </head>
-<body class="p-5 max-w-md mx-auto pb-32">
+<body class="p-5 max-w-md mx-auto">
 
-    <div class="flex justify-between items-end mb-8 pt-4">
-        <div>
-            <h1 class="text-3xl font-black italic tracking-tighter uppercase text-emerald-500">NEXA <span class="text-white">KHATA</span></h1>
-            <p id="liveTime" class="text-[10px] font-bold opacity-40 mt-1 tracking-[2px]"></p>
-        </div>
-        <div class="text-right">
-            <p class="text-[8px] font-black opacity-20 uppercase">Business Suite</p>
-            <p class="text-[10px] font-bold italic text-emerald-400">Khagesh ai-nexa</p>
+    <div id="activationScreen" class="mt-20 text-center">
+        <h1 class="text-4xl font-black italic mb-2 text-emerald-600 uppercase">NEXA <span class="text-slate-400">KHATA</span></h1>
+        <div class="glass-card p-8 mt-10 shadow-2xl mx-2">
+            <i class="fas fa-book text-3xl mb-6 text-emerald-500"></i>
+            <p class="text-[10px] opacity-60 mb-4 font-bold uppercase tracking-widest">Security Lock Active</p>
+            <input type="text" id="licenseKey" placeholder="Enter License Key" class="w-full p-4 bg-gray-100 dark:bg-white/5 rounded-xl text-center font-bold outline-none mb-4 border border-gray-200 dark:border-white/10 text-black dark:text-white">
+            <button onclick="activateApp()" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-black uppercase tracking-widest shadow-lg">Activate Khata</button>
+            <p id="errorMsg" class="text-rose-500 text-[10px] mt-4 font-bold uppercase"></p>
         </div>
     </div>
 
-    <div class="relative mb-6">
-        <i class="fas fa-search absolute left-4 top-3.5 text-[10px] opacity-30"></i>
-        <input type="text" id="searchBox" onkeyup="render()" placeholder="Search customer name..." class="w-full p-3 pl-10 bg-white/5 rounded-xl text-xs border border-white/5 outline-none focus:border-emerald-500/50">
-    </div>
-
-    <div class="glass p-6 mb-8 border-b-2 border-emerald-500/30">
-        <input type="text" id="cName" placeholder="Customer Name" class="w-full p-3 bg-white/5 rounded-xl mb-3 text-xs outline-none border border-white/5">
-        <div class="grid grid-cols-2 gap-3 mb-3">
-            <input type="number" id="cPhone" placeholder="Phone (91...)" class="p-3 bg-white/5 rounded-xl text-xs outline-none border border-white/5">
-            <input type="number" id="cAmt" placeholder="Amount ₹" class="p-3 bg-white/5 rounded-xl text-xs outline-none border border-white/5">
-        </div>
-        <button onclick="addEntry()" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-600/20">Add Transaction</button>
-    </div>
-
-    <div id="kList" class="space-y-4"></div>
-
-    <div class="fixed bottom-0 left-0 w-full p-6 bg-black/90 backdrop-blur-xl border-t border-white/5">
-        <div class="max-w-md mx-auto flex justify-between items-center">
-            <div class="flex gap-8">
-                <a href="mailto:magicalkhagesh888@gmail.com" class="text-emerald-500 text-xl"><i class="fas fa-envelope"></i></a>
-                <a href="https://www.instagram.com/khagesh_ai_nexa?igsh=a2tjMGRpMWRkeWtx" target="_blank" class="text-emerald-500 text-xl"><i class="fab fa-instagram"></i></a>
+    <div id="mainApp" class="hidden pb-32">
+        <div class="flex justify-between items-start mb-6 mt-4">
+            <div>
+                <h1 class="text-2xl font-black italic text-emerald-600 uppercase">DIGITAL <span class="opacity-50 dark:text-white text-black">KHATA</span></h1>
+                <p id="liveTime" class="text-[10px] font-bold opacity-40 tracking-[2px] uppercase"></p>
             </div>
-            <button onclick="exportData()" class="bg-white/5 px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest border border-white/10 hover:bg-white/10 transition">Backup Data</button>
+            <div class="flex flex-col items-end gap-2">
+                <span id="statusTag" class="trial-tag text-[8px] px-3 py-1 rounded-full font-black uppercase">Trial</span>
+                <button onclick="toggleMode()" class="w-8 h-8 rounded-full bg-gray-200 dark:bg-white/5 flex items-center justify-center">
+                    <i id="modeIcon" class="fas fa-moon text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="khata-box p-6 mb-8 shadow-xl">
+            <div class="flex justify-between items-center border-b border-white/20 pb-4 mb-4">
+                <p class="text-[10px] font-black uppercase opacity-80">Total Balance</p>
+                <i class="fas fa-wallet opacity-50"></i>
+            </div>
+            <h2 id="totalBalance" class="text-3xl font-black tracking-tighter">₹ 0</h2>
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <div class="bg-white/10 p-3 rounded-xl">
+                    <p class="text-[8px] uppercase opacity-60">You'll Give</p>
+                    <p id="youGive" class="font-bold text-rose-200">₹ 0</p>
+                </div>
+                <div class="bg-white/10 p-3 rounded-xl">
+                    <p class="text-[8px] uppercase opacity-60">You'll Get</p>
+                    <p id="youGet" class="font-bold text-emerald-100">₹ 0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 mb-8">
+            <p class="text-[9px] font-black uppercase opacity-40 mb-4 tracking-widest">New Entry</p>
+            <div class="space-y-3">
+                <input type="text" id="kName" placeholder="Customer Name" class="w-full p-3 bg-transparent border border-gray-300 dark:border-white/10 rounded-xl text-xs outline-none">
+                <input type="number" id="kPhone" placeholder="WhatsApp Number" class="w-full p-3 bg-transparent border border-gray-300 dark:border-white/10 rounded-xl text-xs outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="number" id="kAmount" placeholder="Amount ₹" class="p-3 bg-transparent border border-gray-300 dark:border-white/10 rounded-xl text-xs outline-none">
+                    <select id="kType" class="p-3 bg-transparent border border-gray-300 dark:border-white/10 rounded-xl text-[10px] outline-none">
+                        <option value="Get">I will Get</option>
+                        <option value="Give">I will Give</option>
+                    </select>
+                </div>
+                <button onclick="saveEntry()" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg">Save Transaction</button>
+            </div>
+        </div>
+
+        <div class="relative mb-6">
+            <i class="fas fa-search absolute left-4 top-3.5 text-[10px] opacity-30"></i>
+            <input type="text" id="searchBox" onkeyup="render()" placeholder="Search Customer..." class="w-full p-3 pl-10 rounded-xl text-xs outline-none bg-gray-100 dark:bg-white/5">
+        </div>
+        <div id="kList" class="space-y-4"></div>
+
+        <div class="fixed bottom-0 left-0 w-full p-6 backdrop-blur-md border-t border-white/5" style="background: var(--bg);">
+            <div class="max-w-md mx-auto flex justify-between items-center">
+                <div class="flex gap-6 text-gray-400">
+                    <a href="mailto:magicalkhagesh888@gmail.com"><i class="fas fa-envelope"></i></a>
+                    <a href="https://www.instagram.com/khagesh_ai_nexa" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <button onclick="exportData()" id="backupBtn" class="hidden"><i class="fas fa-file-export text-emerald-500"></i></button>
+                </div>
+                <p class="text-[8px] font-black opacity-30 uppercase tracking-widest">Khagesh ai-nexa</p>
+            </div>
         </div>
     </div>
 
     <script>
-        let khata = JSON.parse(localStorage.getItem('nexa_khata_pro')) || [];
+        const KEYS = { trial: "TRIAL123", full: "Permanentkey63793119" };
+        let entries = JSON.parse(localStorage.getItem('nexa_khata_final')) || [];
 
-        function addEntry() {
-            const name = document.getElementById('cName').value;
-            const phone = document.getElementById('cPhone').value;
-            const amt = document.getElementById('cAmt').value;
-
-            if(name && amt) {
-                khata.unshift({ id: Date.now(), name, phone: phone || '', amt, date: new Date().toLocaleDateString() });
-                save();
-                clear();
-            }
+        function activateApp() {
+            const val = document.getElementById('licenseKey').value;
+            if(val === KEYS.full) { localStorage.setItem('n_k_auth', 'FULL'); launchApp('Permanent'); }
+            else if(val === KEYS.trial) { localStorage.setItem('n_k_auth', 'TRIAL'); localStorage.setItem('n_k_date', Date.now()); launchApp('Trial Mode'); }
+            else { document.getElementById('errorMsg').innerText = "Wrong Key!"; }
         }
 
-        function save() {
-            localStorage.setItem('nexa_khata_pro', JSON.stringify(khata));
+        function launchApp(type) {
+            document.getElementById('activationScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            const tag = document.getElementById('statusTag');
+            tag.innerText = type;
+            if(type === 'Permanent') {
+                tag.className = "active-tag text-[8px] px-3 py-1 rounded-full font-black uppercase";
+                document.getElementById('backupBtn').classList.remove('hidden');
+            }
             render();
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('modeIcon');
+            icon.classList.toggle('fa-moon'); icon.classList.toggle('fa-sun');
+        }
+
+        function saveEntry() {
+            const name = document.getElementById('kName').value;
+            const phone = document.getElementById('kPhone').value;
+            const amount = parseFloat(document.getElementById('kAmount').value);
+            const type = document.getElementById('kType').value;
+            if(name && amount) {
+                entries.unshift({ id: Date.now(), name, phone, amount, type, date: new Date().toLocaleDateString() });
+                localStorage.setItem('nexa_khata_final', JSON.stringify(entries));
+                render();
+                document.getElementById('kName').value = ''; document.getElementById('kAmount').value = '';
+            }
         }
 
         function render() {
             const list = document.getElementById('kList');
             const term = document.getElementById('searchBox').value.toLowerCase();
-            list.innerHTML = '';
+            let give = 0, get = 0;
 
-            khata.filter(item => item.name.toLowerCase().includes(term)).forEach(item => {
-                list.innerHTML += `
-                    <div class="glass p-5 emerald-glow flex justify-between items-center">
-                        <div class="flex-1">
-                            <p class="text-xs font-black uppercase italic tracking-tight">${item.name}</p>
-                            <p class="text-[9px] opacity-40">${item.date}</p>
+            list.innerHTML = entries.filter(e => e.name.toLowerCase().includes(term)).map(e => {
+                if(e.type === 'Give') give += e.amount; else get += e.amount;
+                return `
+                <div class="glass-card p-5 flex justify-between items-center shadow-sm">
+                    <div>
+                        <span class="text-[7px] font-bold px-2 py-0.5 rounded ${e.type === 'Get' ? 'bg-emerald-500' : 'bg-rose-500'} text-white uppercase">${e.type === 'Get' ? 'Lene Hain' : 'Dene Hain'}</span>
+                        <h3 class="text-xs font-black uppercase mt-1 tracking-tighter">${e.name}</h3>
+                        <p class="text-[9px] opacity-40">${e.date}</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="text-right">
+                            <p class="text-xs font-black ${e.type === 'Get' ? 'text-emerald-500' : 'text-rose-500'}">₹${e.amount}</p>
                         </div>
-                        <div class="text-right flex items-center gap-4">
-                            <p class="text-sm font-black text-emerald-400 italic">₹${item.amt}</p>
-                            <div class="flex gap-3 ml-4 border-l border-white/5 pl-4">
-                                ${item.phone ? `<a href="tel:${item.phone}" class="text-blue-400 text-xs"><i class="fas fa-phone-alt"></i></a>` : ''}
-                                ${item.phone ? `<button onclick="sendWA('${item.phone}', '${item.name}', '${item.amt}')" class="text-emerald-500 text-xs"><i class="fab fa-whatsapp"></i></button>` : ''}
-                                <button onclick="deleteEntry(${item.id})" class="text-rose-500/20 text-[10px]"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>`;
-            });
+                        <button onclick="window.open('https://wa.me/91${e.phone}?text=Nexa Khata Reminder: Hello ${e.name}, your pending balance is ₹${e.amount}. Please clear it.')" class="text-emerald-500 text-lg"><i class="fab fa-whatsapp"></i></button>
+                        <button onclick="deleteEntry(${e.id})" class="text-rose-500/10 text-xs"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            document.getElementById('youGive').innerText = `₹ ${give}`;
+            document.getElementById('youGet').innerText = `₹ ${get}`;
+            document.getElementById('totalBalance').innerText = `₹ ${get - give}`;
         }
 
-        function sendWA(ph, n, a) {
-            const msg = `*Khata Update - Khagesh ai-nexa*%0AHello ${n}, aapka balance ₹${a} record kiya gaya hai.`;
-            window.open(`https://wa.me/${ph}?text=${msg}`);
-        }
-
-        function deleteEntry(id) { khata = khata.filter(x => x.id !== id); save(); }
-        function clear() { document.getElementById('cName').value = ''; document.getElementById('cPhone').value = ''; document.getElementById('cAmt').value = ''; }
+        function deleteEntry(id) { if(confirm('Delete this entry?')) { entries = entries.filter(x => x.id !== id); localStorage.setItem('nexa_khata_final', JSON.stringify(entries)); render(); } }
         
         function exportData() {
-            const blob = new Blob([JSON.stringify(khata)], {type: "application/json"});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Khata_Backup_${new Date().toLocaleDateString()}.json`;
-            a.click();
+            const blob = new Blob([JSON.stringify(entries)], {type: "application/json"});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `Khata_Backup.json`; a.click();
         }
 
-        setInterval(() => {
-            document.getElementById('liveTime').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        setInterval(() => { document.getElementById('liveTime').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        render();
+        window.onload = () => {
+            const auth = localStorage.getItem('n_k_auth');
+            if(auth === 'FULL') launchApp('Permanent');
+            else if(auth === 'TRIAL') {
+                const start = localStorage.getItem('n_k_date');
+                if((Date.now() - start)/(1000*60*60*24) < 2) launchApp('Trial Mode');
+                else { localStorage.removeItem('n_k_auth'); location.reload(); }
+            }
+        }
     </script>
 </body>
-</html>
+                        </html>
+                        
