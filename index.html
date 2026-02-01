@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Malhotra Classes ERP | Premium v8.1</title>
+    <title>Malhotra Classes ERP | Premium Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -17,8 +17,6 @@
         input { background: #1e232d !important; border: 1px solid #2d3545 !important; color: #fff !important; padding: 12px !important; border-radius: 12px !important; width: 100%; outline: none; transition: 0.3s; font-size: 13px !important; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .btn-gradient { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #2d3545; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -29,9 +27,9 @@
         <p id="secMsg" class="text-[9px] text-slate-500 mb-8 uppercase font-bold tracking-widest italic">Sant Nagar Burari, Delhi</p>
         <div class="space-y-4">
             <input type="password" id="mKey" placeholder="Permanent Key" class="text-center font-bold tracking-widest">
-            <button onclick="unlockApp()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs shadow-lg">Activate Premium</button>
+            <button onclick="unlockApp()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs shadow-lg">Activate System</button>
             <div id="trialArea" class="hidden">
-                <button onclick="enterApp()" class="w-full bg-slate-800 border border-slate-700 py-4 rounded-xl font-black uppercase text-[10px] text-indigo-400 mt-2">Start 7-Day Trial</button>
+                <button onclick="enterApp()" class="w-full bg-slate-800 border border-slate-700 py-4 rounded-xl font-black uppercase text-[10px] text-indigo-400 mt-2">Start Trial</button>
             </div>
         </div>
     </div>
@@ -41,11 +39,11 @@
     <header class="py-6 flex justify-between items-start">
         <div class="flex-1">
             <h1 class="text-lg font-black text-indigo-500 italic leading-none uppercase">Malhotra Classes</h1>
-            <p class="text-[7px] text-slate-400 font-bold uppercase mt-1 leading-tight">Street No 112/10, B Block, Sant Nagar Burari, Delhi-110084</p>
+            <p class="text-[7px] text-slate-400 font-bold uppercase mt-1 leading-tight max-w-[180px]">Street No 112/10, B Block, Sant Nagar Burari, Delhi-110084</p>
             <p class="text-[6px] text-indigo-400/50 font-black uppercase tracking-[2px] mt-2 italic">Powered by Khagesh ai-nexa</p>
         </div>
         <div class="flex gap-1.5 shrink-0">
-            <label class="w-8 h-8 nexa-glass text-emerald-400 flex items-center justify-center text-[10px] cursor-pointer border-emerald-500/20"><i class="fas fa-file-import"></i><input type="file" accept=".csv" class="hidden" onchange="importCSV(event)"></label>
+            <label class="w-8 h-8 nexa-glass text-emerald-400 flex items-center justify-center text-[10px] cursor-pointer"><i class="fas fa-file-import"></i><input type="file" accept=".csv" class="hidden" onchange="importCSV(event)"></label>
             <button onclick="exportCSV()" class="w-8 h-8 nexa-glass text-amber-500 flex items-center justify-center text-[10px]"><i class="fas fa-file-csv"></i></button>
             <button onclick="backupJSON()" class="w-8 h-8 nexa-glass text-blue-400 flex items-center justify-center text-[10px]"><i class="fas fa-download"></i></button>
         </div>
@@ -53,44 +51,41 @@
 
     <div id="t-home" class="tab-content active-tab space-y-4">
         <div class="grid grid-cols-2 gap-3">
-            <div class="nexa-glass p-6 text-center border-b-2 border-indigo-500/20 shadow-xl"><h2 id="stCount" class="text-4xl font-extrabold text-white">0</h2><p class="text-[8px] text-slate-500 uppercase font-bold tracking-widest mt-1">Total Students</p></div>
-            <div class="nexa-glass bg-indigo-600/10 p-6 text-center border-b-2 border-indigo-500/40 shadow-xl"><h2 id="revCount" class="text-3xl font-extrabold text-indigo-400">₹0</h2><p class="text-[8px] text-indigo-300/50 uppercase font-bold tracking-widest mt-1">Expected Fee</p></div>
+            <div class="nexa-glass p-6 text-center border-b-2 border-indigo-500/20 shadow-xl"><h2 id="stCount" class="text-4xl font-extrabold text-white">0</h2><p class="text-[8px] text-slate-500 uppercase font-bold tracking-widest mt-1">Students</p></div>
+            <div class="nexa-glass bg-indigo-600/10 p-6 text-center border-b-2 border-indigo-500/40 shadow-xl"><h2 id="revCount" class="text-3xl font-extrabold text-indigo-400">₹0</h2><p class="text-[8px] text-indigo-300/50 uppercase font-bold tracking-widest mt-1">Revenue</p></div>
         </div>
-        <div class="relative"><input type="text" id="hSearch" onkeyup="renderHome()" placeholder="Search Name, Batch, or Class..." class="pl-11"><i class="fas fa-search absolute left-4 top-4 text-slate-600 text-xs"></i></div>
+        <div class="relative"><input type="text" id="hSearch" onkeyup="renderHome()" placeholder="Search Name, Batch, or Subject..." class="pl-11"><i class="fas fa-search absolute left-4 top-4 text-slate-600 text-xs"></i></div>
         <div id="hList" class="space-y-3"></div>
     </div>
 
     <div id="t-add" class="tab-content space-y-4">
         <div class="nexa-glass p-6 space-y-3 border-t-2 border-indigo-500">
-            <h3 class="text-[10px] font-black text-indigo-400 uppercase italic tracking-widest mb-2">Enrollment Panel</h3>
-            <input type="text" id="inN" placeholder="Student Name">
-            <div class="grid grid-cols-2 gap-2"><input type="text" id="inB" placeholder="Batch Name"><input type="text" id="inC" placeholder="Class/Subject"></div>
-            <div class="grid grid-cols-2 gap-2"><input type="number" id="inF" placeholder="Fee Amount"><input type="number" id="inP" placeholder="WhatsApp Number"></div>
-            <div class="flex flex-col"><label class="text-[8px] text-slate-500 font-bold mb-1 ml-1 uppercase italic">Joining Date</label><input type="date" id="inD"></div>
-            <button onclick="saveStudent()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs italic shadow-lg mt-4">Save Enrollment</button>
+            <h3 class="text-[10px] font-black text-indigo-400 uppercase italic mb-2">Registration</h3>
+            <input type="text" id="inN" placeholder="Full Student Name">
+            <div class="grid grid-cols-2 gap-2"><input type="text" id="inB" placeholder="Batch"><input type="text" id="inC" placeholder="Subject"></div>
+            <div class="grid grid-cols-2 gap-2"><input type="number" id="inF" placeholder="Fee"><input type="number" id="inP" placeholder="WhatsApp No."></div>
+            <div class="flex flex-col"><label class="text-[8px] text-slate-500 font-bold mb-1 ml-1 uppercase">Admission Date</label><input type="date" id="inD"></div>
+            <button onclick="saveStudent()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs italic shadow-lg mt-4">Enroll Student</button>
         </div>
     </div>
 
     <div id="t-att" class="tab-content space-y-4">
         <div class="nexa-glass p-5 shadow-xl">
-            <div class="flex flex-col gap-2 mb-4">
-                <input type="date" id="atDate" onchange="loadAtt()">
-                <div class="relative"><input type="text" id="atSearch" onkeyup="loadAtt()" placeholder="Filter Class, Batch, or Name..." class="pl-11 border-indigo-500/20"><i class="fas fa-filter absolute left-4 top-4 text-indigo-500 text-xs"></i></div>
-            </div>
-            <div id="atList" class="space-y-2 mb-4 max-h-80 overflow-y-auto pr-1"></div>
+            <input type="date" id="atDate" onchange="loadAtt()" class="mb-3">
+            <div class="relative mb-4"><input type="text" id="atSearch" onkeyup="loadAtt()" placeholder="Filter by Name, Class or Batch..." class="pl-11 border-indigo-500/20"><i class="fas fa-filter absolute left-4 top-4 text-indigo-500 text-xs"></i></div>
+            <div id="atList" class="space-y-2 mb-4 max-h-80 overflow-y-auto"></div>
             <button onclick="saveAtt()" class="w-full btn-gradient py-3 rounded-xl font-black uppercase text-[10px]">Lock Attendance</button>
         </div>
         <div class="nexa-glass p-5 text-center border-dashed border-white/10">
-            <p class="text-[8px] text-slate-500 uppercase font-black mb-1 italic">Range Attendance PDF</p>
             <div class="flex gap-2 mb-2"><input type="date" id="fromD"><input type="date" id="toD"></div>
-            <button onclick="genAttendancePDF()" class="w-full bg-slate-800 border border-slate-700 text-indigo-400 py-3 rounded-xl font-black text-[9px] uppercase">Export PDF Report</button>
+            <button onclick="genAttendancePDF()" class="w-full bg-slate-800 text-indigo-400 py-3 rounded-xl font-black text-[9px] uppercase">Export PDF Report</button>
         </div>
     </div>
 
     <div id="t-fees" class="tab-content space-y-4">
         <div class="nexa-glass p-5 shadow-xl">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-[10px] font-black uppercase text-indigo-400 italic">Fee Tracker</h3><button onclick="waBulk()" class="bg-green-600/20 text-green-500 border border-green-500/30 px-4 py-2 rounded-lg text-[8px] font-black uppercase">WhatsApp Bulk</button></div>
-            <div class="relative mb-4"><input type="text" id="fSearch" onkeyup="renderFees()" placeholder="Filter Class, Batch, or Student..." class="pl-11 border-indigo-500/20"><i class="fas fa-search-dollar absolute left-4 top-4 text-indigo-500 text-xs"></i></div>
+            <div class="flex justify-between items-center mb-4"><h3 class="text-[10px] font-black uppercase text-indigo-400 italic">Billing</h3><button onclick="waBulk()" class="bg-green-600/20 text-green-500 border border-green-500/30 px-4 py-2 rounded-lg text-[8px] font-black uppercase">WhatsApp Bulk</button></div>
+            <div class="relative mb-4"><input type="text" id="fSearch" onkeyup="renderFees()" placeholder="Filter by Student, Batch or Class..." class="pl-11 border-indigo-500/20"><i class="fas fa-search-dollar absolute left-4 top-4 text-indigo-500 text-xs"></i></div>
             <div id="fList" class="space-y-2"></div>
         </div>
     </div>
@@ -99,7 +94,7 @@
         <button onclick="nav('home', this)" class="p-4 text-indigo-500"><i class="fas fa-home"></i></button>
         <button onclick="nav('add', this)" class="p-4 text-slate-500"><i class="fas fa-user-plus"></i></button>
         <button onclick="nav('att', this)" class="p-4 text-slate-500"><i class="fas fa-calendar-check"></i></button>
-        <button onclick="nav('fees', this)" class="p-4 text-slate-500"><i class="fas fa-receipt"></i></button>
+        <button onclick="nav('fees', this)" class="p-4 text-slate-500"><i class="fas fa-file-invoice-dollar"></i></button>
     </nav>
 </div>
 
@@ -112,19 +107,14 @@
     window.onload = () => {
         const start = localStorage.getItem("nexa_start") || Date.now();
         if(!localStorage.getItem("nexa_start")) localStorage.setItem("nexa_start", start);
-        const daysUsed = Math.floor((Date.now() - start) / 86400000);
-        if(localStorage.getItem("nexa_ver") === "true") { enterApp(); }
-        else if(daysUsed < 7) { 
-            document.getElementById("secMsg").innerText = `TRIAL: ${7-daysUsed} DAYS REMAINING`;
-            document.getElementById("trialArea").classList.remove("hidden");
-        } else { document.getElementById("secMsg").innerText = "TRIAL EXPIRED"; document.getElementById("secMsg").style.color = "#ef4444"; }
+        if(localStorage.getItem("nexa_ver") === "true") { enterApp(); } else { document.getElementById("lockScreen").style.display = "flex"; }
     };
 
     function unlockApp() { if(document.getElementById("mKey").value === PKEY) { localStorage.setItem("nexa_ver", "true"); enterApp(); } else alert("Invalid Key!"); }
     function enterApp() { document.getElementById("lockScreen").style.display = "none"; document.getElementById("appUI").style.display = "block"; initDB(); }
 
     function initDB() {
-        const req = indexedDB.open("MalhotraClasses_DB_FinalV8.1", 1);
+        const req = indexedDB.open("MalhotraClasses_ERP_v85", 1);
         req.onupgradeneeded = e => { db = e.target.result; db.createObjectStore("st", {keyPath: "id"}); db.createObjectStore("at", {keyPath: "date"}); };
         req.onsuccess = e => { db = e.target.result; sync(); if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); };
     }
@@ -146,10 +136,10 @@
         const q = document.getElementById("hSearch").value.toLowerCase();
         const filt = students.filter(s => s.name.toLowerCase().includes(q) || s.batch.toLowerCase().includes(q) || s.cls.toLowerCase().includes(q));
         document.getElementById("hList").innerHTML = filt.map(s => `
-            <div class="nexa-glass p-5 flex justify-between items-center shadow-lg border-l-4 border-indigo-500">
+            <div class="nexa-glass p-5 flex justify-between items-center border-l-4 border-indigo-500 shadow-lg">
                 <div><p class="font-black text-sm text-white uppercase italic leading-tight">${s.name}</p>
-                <p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest">${s.batch} | ${s.cls}</p>
-                <p class="text-[7px] text-indigo-400 font-bold mt-1 uppercase italic italic">Joined: ${s.date || '---'}</p></div>
+                <p class="text-[8px] text-slate-500 font-bold uppercase">${s.batch} | ${s.cls}</p>
+                <p class="text-[7px] text-indigo-400 font-bold mt-1 uppercase">Joined: ${s.date || 'N/A'}</p></div>
                 <div class="flex gap-2">
                     <a href="tel:${s.phone}" class="w-8 h-8 bg-indigo-500/10 text-indigo-400 flex items-center justify-center rounded-full text-[10px]"><i class="fas fa-phone-alt"></i></a>
                     <button onclick="delSt(${s.id})" class="w-8 h-8 bg-red-500/10 text-red-500 flex items-center justify-center rounded-full text-[10px]"><i class="fas fa-trash-alt"></i></button>
@@ -157,11 +147,11 @@
             </div>`).join("");
     }
 
-    function delSt(id) { if(confirm("Delete Student?")) { const tx = db.transaction("st", "readwrite"); tx.objectStore("st").delete(id); tx.oncomplete = () => { students = students.filter(s => s.id !== id); updateUI(); }; } }
+    function delSt(id) { if(confirm("Delete Record?")) { const tx = db.transaction("st", "readwrite"); tx.objectStore("st").delete(id); tx.oncomplete = () => { students = students.filter(s => s.id !== id); updateUI(); }; } }
 
     function saveStudent() {
         const s = { id: Date.now(), name: document.getElementById("inN").value, batch: document.getElementById("inB").value, cls: document.getElementById("inC").value, fee: document.getElementById("inF").value, phone: document.getElementById("inP").value, date: document.getElementById("inD").value || new Date().toISOString().split('T')[0] };
-        if(!s.name || !s.phone) return alert("Missing Info!");
+        if(!s.name || !s.phone) return alert("Required: Name & Phone");
         const tx = db.transaction("st", "readwrite");
         tx.objectStore("st").add(s);
         tx.oncomplete = () => location.reload();
@@ -169,6 +159,7 @@
 
     function loadAtt() {
         const d = document.getElementById("atDate").value || new Date().toISOString().split('T')[0];
+        document.getElementById("atDate").value = d;
         const q = document.getElementById("atSearch").value.toLowerCase();
         const saved = attData[d] || [];
         const filt = students.filter(s => s.name.toLowerCase().includes(q) || s.batch.toLowerCase().includes(q) || s.cls.toLowerCase().includes(q));
@@ -198,16 +189,16 @@
         doc.setFillColor(31, 41, 55); doc.rect(0, 0, 210, 45, 'F');
         doc.setTextColor(255); doc.setFontSize(16); doc.text(CLIENT_NAME, 105, 15, {align:"center"});
         doc.setFontSize(8); doc.setTextColor(200); doc.text(CLIENT_ADDR, 105, 23, {align:"center"});
-        doc.setFontSize(10); doc.setTextColor(255); doc.text(`ATTENDANCE REPORT (${f} to ${t})`, 105, 35, {align:"center"});
+        doc.setFontSize(10); doc.setTextColor(255); doc.text(`ATTENDANCE REGISTER (${f} to ${t})`, 105, 35, {align:"center"});
 
         const rows = [];
         Object.keys(attData).sort().forEach(date => {
             if(date >= f && date <= t) attData[date].forEach(e => { 
                 const s = students.find(x => x.id === e.id); 
-                if(s) rows.push([date, s.name, s.batch, s.cls, e.status === "P" ? "Present" : "Absent"]); 
+                if(s) rows.push([date, s.name, s.batch, s.cls, e.status === "P" ? "P" : "A"]); 
             });
         });
-        doc.autoTable({ startY: 50, head: [['Date', 'Name', 'Batch', 'Class', 'Status']], body: rows, headStyles:{fillColor:[63, 81, 181]} });
+        doc.autoTable({ startY: 50, head: [['Date', 'Name', 'Batch', 'Subject', 'Status']], body: rows, headStyles:{fillColor:[63, 81, 181]} });
         doc.setFontSize(7); doc.setTextColor(150); doc.text("Powered by Khagesh ai-nexa", 105, 285, {align:"center"});
         doc.save(`Attendance_MalhotraClasses.pdf`);
     }
@@ -225,7 +216,7 @@
         doc.autoTable({
             startY: 65, theme: 'grid',
             head: [['Description', 'Details']],
-            body: [['Student', s.name.toUpperCase()], ['Batch', s.batch], ['Class', s.cls], ['Receipt No', `MC-${rNo}`], ['Joined', s.date || 'N/A'], ['Status', 'PAID']],
+            body: [['Student', s.name.toUpperCase()], ['Batch', s.batch], ['Subject', s.cls], ['Receipt No', `MC-${rNo}`], ['Admission Date', s.date || 'N/A'], ['Status', 'PAID']],
             headStyles: { fillColor: [31, 41, 55] }
         });
         doc.setTextColor(0); doc.setFontSize(14); doc.text(`TOTAL PAID: INR ${s.fee}/-`, 105, doc.lastAutoTable.finalY + 20, {align:"center"});
@@ -240,7 +231,7 @@
             <div class="nexa-glass p-4 flex justify-between items-center mb-2 shadow-lg">
                 <div class="flex items-center gap-3">
                     <input type="checkbox" class="wa-sel w-5 h-5 accent-indigo-500" data-id="${s.id}">
-                    <div><p class="text-xs font-black uppercase text-white">${s.name}</p><p class="text-[8px] text-slate-500 uppercase font-bold">${s.batch} | ${s.cls}</p></div>
+                    <div><p class="text-xs font-black uppercase text-white leading-tight">${s.name}</p><p class="text-[8px] text-slate-500 uppercase font-bold">${s.batch} | ${s.cls}</p></div>
                 </div>
                 <button onclick='genInvoice(${JSON.stringify(s)})' class="text-indigo-400 text-xl"><i class="fas fa-file-invoice-dollar"></i></button>
             </div>`).join("");
@@ -285,4 +276,8 @@
 
     function backupJSON() {
         const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify({st:students, at:attData})], {type: "application/json"}));
-        a.download = `M
+        a.download = `Malhotra_Full_Backup.json`; a.click();
+    }
+</script>
+</body>
+</html>
