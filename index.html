@@ -10,20 +10,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0b0e14; color: #fff; overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0b0e14; color: #fff; overflow-x: hidden; transition: 0.3s; }
         .nexa-glass { background: #151921; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; }
         .tab-content { display: none; }
         .active-tab { display: block; animation: slideUp 0.3s ease; }
         input { background: #1e232d !important; border: 1px solid #2d3545 !important; color: #fff !important; padding: 12px !important; border-radius: 12px !important; width: 100%; outline: none; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .btn-gradient { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
-        .dark-mode { background: #0b0e14; color: #fff; }
         .light-mode { background: #f3f4f6; color: #1f2937; }
         .light-mode .nexa-glass { background: #ffffff; border: 1px solid #e5e7eb; color: #1f2937; }
         .light-mode input { background: #f9fafb !important; border: 1px solid #d1d5db !important; color: #1f2937 !important; }
     </style>
 </head>
-<body class="dark-mode" id="bodyBody">
+<body class="dark-mode" id="mainBody">
 
 <div id="lockScreen" class="fixed inset-0 z-[9999] bg-[#0b0e14] flex items-center justify-center p-6 text-center">
     <div class="nexa-glass p-8 w-full max-w-sm border-t-4 border-indigo-600 shadow-2xl">
@@ -45,23 +44,26 @@
     <header class="py-6 flex justify-between items-center">
         <div>
             <h1 class="text-xl font-black text-indigo-500 italic">Malhotra Classes</h1>
-            <p class="text-[8px] text-slate-500 font-bold uppercase tracking-[1px]">Accounts Villa, Sant Nagar Burari</p>
+            <p class="text-[8px] text-slate-500 font-bold uppercase tracking-[1px]">Accounts Villa, Burari</p>
             <p class="text-[7px] text-indigo-400/60 font-bold uppercase">Powered by Khagesh ai-nexa</p>
         </div>
         <div class="flex gap-2">
-            <button onclick="toggleMode()" class="w-9 h-9 nexa-glass flex items-center justify-center text-xs"><i class="fas fa-moon"></i></button>
-            <label class="w-9 h-9 nexa-glass text-emerald-400 flex items-center justify-center text-xs cursor-pointer"><i class="fas fa-file-import"></i><input type="file" class="hidden" accept=".json" onchange="importData(this)"></label>
-            <button onclick="backupJSON()" class="w-9 h-9 nexa-glass text-blue-400 flex items-center justify-center text-xs"><i class="fas fa-save"></i></button>
-            <button onclick="masterReset()" class="w-9 h-9 nexa-glass text-red-500 flex items-center justify-center text-xs"><i class="fas fa-power-off"></i></button>
+            <button onclick="toggleTheme()" class="w-9 h-9 nexa-glass flex items-center justify-center text-xs"><i class="fas fa-adjust"></i></button>
+            <button onclick="exportJSON()" title="Export Data" class="w-9 h-9 nexa-glass text-blue-400 flex items-center justify-center text-xs shadow-lg"><i class="fas fa-download"></i></button>
+            <label class="w-9 h-9 nexa-glass text-emerald-400 flex items-center justify-center text-xs cursor-pointer shadow-lg">
+                <i class="fas fa-upload"></i>
+                <input type="file" id="importFile" class="hidden" accept=".json" onchange="importJSON(this)">
+            </label>
+            <button onclick="masterReset()" class="w-9 h-9 nexa-glass text-red-500 flex items-center justify-center text-xs shadow-lg"><i class="fas fa-trash-alt"></i></button>
         </div>
     </header>
 
     <div id="t-home" class="tab-content active-tab space-y-4">
         <div class="grid grid-cols-2 gap-3">
-            <div class="nexa-glass p-6 text-center shadow-xl border-b-2 border-indigo-500/20"><h2 id="stCount" class="text-4xl font-black">0</h2><p class="text-[9px] text-slate-500 uppercase font-black">Students</p></div>
-            <div class="nexa-glass bg-indigo-600/10 p-6 text-center shadow-xl border-b-2 border-indigo-500/40"><h2 id="revCount" class="text-3xl font-black text-indigo-400">₹0</h2><p class="text-[9px] text-indigo-300/50 uppercase font-black">Revenue</p></div>
+            <div class="nexa-glass p-6 text-center shadow-xl border-b-2 border-indigo-500/20"><h2 id="stCount" class="text-4xl font-black">0</h2><p class="text-[9px] text-slate-500 uppercase font-black">Total Students</p></div>
+            <div class="nexa-glass bg-indigo-600/10 p-6 text-center shadow-xl border-b-2 border-indigo-500/40"><h2 id="revCount" class="text-3xl font-black text-indigo-400">₹0</h2><p class="text-[9px] text-indigo-300/50 uppercase font-black">Total Revenue</p></div>
         </div>
-        <div class="relative"><input type="text" id="hSearch" onkeyup="renderHome()" placeholder="Search Name, Batch, or Subject..." class="pl-11 text-xs"><i class="fas fa-search absolute left-4 top-4 text-slate-600"></i></div>
+        <div class="relative"><input type="text" id="hSearch" onkeyup="renderHome()" placeholder="Search Name, Batch, or Subject..." class="pl-11 text-xs shadow-inner"><i class="fas fa-search absolute left-4 top-4 text-slate-600"></i></div>
         <div id="hList" class="space-y-3"></div>
     </div>
 
@@ -78,11 +80,11 @@
 
     <div id="t-att" class="tab-content space-y-4">
         <div class="nexa-glass p-5 shadow-xl">
-            <div class="flex gap-2 mb-4"><input type="date" id="atDate" onchange="loadAtt()" class="!w-1/3 text-[10px]"><input type="text" id="atSearch" onkeyup="loadAtt()" placeholder="Search Students..." class="!w-2/3 text-xs"></div>
+            <div class="flex gap-2 mb-4"><input type="date" id="atDate" onchange="loadAtt()" class="!w-1/3 text-[10px]"><input type="text" id="atSearch" onkeyup="loadAtt()" placeholder="Search Name/Batch..." class="!w-2/3 text-xs"></div>
             <div id="atList" class="space-y-2 mb-4 max-h-60 overflow-y-auto pr-1"></div>
-            <button onclick="saveAtt()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs">Lock Attendance</button>
+            <button onclick="saveAtt()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs shadow-md">Lock Attendance</button>
             <hr class="border-white/5 my-6">
-            <p class="text-[10px] font-bold text-slate-500 uppercase mb-2">Export Range</p>
+            <p class="text-[9px] font-bold text-slate-500 uppercase mb-2">Export PDF Range</p>
             <div class="flex gap-2 mb-2"><input type="date" id="fromD" class="text-[10px]"><input type="date" id="toD" class="text-[10px]"></div>
             <button onclick="exportAttendanceReport()" class="w-full bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 py-3 rounded-lg font-black text-[9px] uppercase">Download Attendance PDF</button>
         </div>
@@ -90,7 +92,7 @@
 
     <div id="t-fees" class="tab-content space-y-4">
         <div class="nexa-glass p-5">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-[10px] font-black uppercase text-indigo-400 italic">Fee Management</h3><button onclick="waBulk()" class="bg-green-600/20 text-green-500 border border-green-500/30 px-4 py-2 rounded-lg text-[8px] font-black uppercase">Bulk WhatsApp</button></div>
+            <div class="flex justify-between items-center mb-4"><h3 class="text-[10px] font-black uppercase text-indigo-400 italic">Fee Management</h3><button onclick="waBulk()" class="bg-green-600/20 text-green-500 border border-green-500/30 px-4 py-2 rounded-lg text-[8px] font-black uppercase">Bulk Reminder</button></div>
             <input type="text" id="fSearch" onkeyup="renderFees()" placeholder="Search Name, Batch, Subject..." class="text-xs mb-4">
             <div id="fList" class="space-y-2"></div>
         </div>
@@ -105,172 +107,136 @@
 </div>
 
 <script>
-    const MASTER_KEY = "Permanentkey63793119";
+    const M_KEY = "Permanentkey63793119";
     let db, students = [], attData = {};
 
     function unlockApp() {
-        const input = document.getElementById("mKey").value.trim();
-        if(input === MASTER_KEY) { localStorage.setItem("nexa_auth_status", "premium"); enterApp(); }
-        else { alert("🚫 Invalid License Key!"); }
+        if(document.getElementById("mKey").value.trim() === M_KEY) { localStorage.setItem("nexa_auth_status", "premium"); enterApp(); }
+        else alert("🚫 Invalid License Key!");
     }
 
     window.onload = () => {
-        const now = Date.now();
-        const savedStart = Number(localStorage.getItem("nexa_start_ts"));
-        const lastSeen = Number(localStorage.getItem("nexa_last_seen")) || now;
-        if(now < lastSeen && !localStorage.getItem("nexa_auth_status")) { localStorage.setItem("nexa_tampered", "true"); }
+        const now = Date.now(), savedStart = Number(localStorage.getItem("nexa_start_ts")), lastSeen = Number(localStorage.getItem("nexa_last_seen")) || now;
+        if(now < lastSeen && !localStorage.getItem("nexa_auth_status")) localStorage.setItem("nexa_tampered", "true");
         localStorage.setItem("nexa_last_seen", now);
-        if(!savedStart) { localStorage.setItem("nexa_start_ts", now); }
-        const trialDays = Math.floor((now - (savedStart || now)) / 86400000);
-        const isTampered = localStorage.getItem("nexa_tampered") === "true";
-        if(localStorage.getItem("nexa_auth_status") === "premium") { enterApp(); }
-        else if(trialDays >= 7 || isTampered) { 
-            document.getElementById("secMsg").innerText = isTampered ? "SECURITY VIOLATION" : "TRIAL EXPIRED";
-            document.getElementById("secMsg").style.color = "#ef4444";
-        } else {
-            document.getElementById("secMsg").innerText = `TRIAL: ${7 - trialDays} DAYS LEFT`;
-            document.getElementById("trialArea").classList.remove("hidden");
-        }
+        if(!savedStart) localStorage.setItem("nexa_start_ts", now);
+        const trialDays = Math.floor((now - (savedStart || now)) / 86400000), isTampered = localStorage.getItem("nexa_tampered") === "true";
+        if(localStorage.getItem("nexa_auth_status") === "premium") enterApp();
+        else if(trialDays >= 7 || isTampered) { document.getElementById("secMsg").innerText = isTampered ? "TAMPERED" : "EXPIRED"; document.getElementById("secMsg").style.color="#f00"; }
+        else { document.getElementById("secMsg").innerText = `TRIAL: ${7-trialDays} DAYS LEFT`; document.getElementById("trialArea").classList.remove("hidden"); }
     };
 
-    function enterApp() { document.getElementById("lockScreen").style.display = "none"; document.getElementById("appUI").style.display = "block"; initDB(); }
+    function enterApp() { document.getElementById("lockScreen").style.display="none"; document.getElementById("appUI").style.display="block"; initDB(); }
 
     function initDB() {
-        const req = indexedDB.open("NexaEduMaster_V17", 1);
-        req.onupgradeneeded = e => { 
-            db = e.target.result; 
-            db.createObjectStore("st", {keyPath: "id"}); 
-            db.createObjectStore("at", {keyPath: "date"}); 
-        };
-        req.onsuccess = e => { 
-            db = e.target.result; 
-            sync(); 
-            if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
-        };
+        const req = indexedDB.open("MalhotraERP_DB", 1);
+        req.onupgradeneeded = e => { db=e.target.result; db.createObjectStore("st",{keyPath:"id"}); db.createObjectStore("at",{keyPath:"date"}); };
+        req.onsuccess = e => { db=e.target.result; sync(); if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); };
     }
 
     function sync() {
-        const tx = db.transaction(["st", "at"], "readonly");
-        tx.objectStore("st").getAll().onsuccess = e => { students = e.target.result; updateUI(); };
-        tx.objectStore("at").getAll().onsuccess = e => { e.target.result.forEach(r => attData[r.date] = r.data); loadAtt(); };
+        const tx = db.transaction(["st","at"],"readonly");
+        tx.objectStore("st").getAll().onsuccess = e => { students=e.target.result; updateUI(); };
+        tx.objectStore("at").getAll().onsuccess = e => { e.target.result.forEach(r => attData[r.date]=r.data); loadAtt(); };
     }
 
     function updateUI() {
-        let rv = 0; students.forEach(s => rv += Number(s.fee));
-        document.getElementById("stCount").innerText = students.length;
-        document.getElementById("revCount").innerText = `₹${rv}`;
+        let rev=0; students.forEach(s=>rev+=Number(s.fee));
+        document.getElementById("stCount").innerText=students.length;
+        document.getElementById("revCount").innerText=`₹${rev}`;
         renderHome(); renderFees();
     }
 
     function renderHome() {
-        const q = document.getElementById("hSearch").value.toLowerCase();
-        const filt = students.filter(s => s.name.toLowerCase().includes(q) || s.batch.toLowerCase().includes(q) || s.cls.toLowerCase().includes(q));
-        document.getElementById("hList").innerHTML = filt.map(s => `
-            <div class="nexa-glass p-5 flex justify-between items-center border-l-4 border-indigo-500">
-                <div>
-                    <p class="font-black text-sm uppercase italic">${s.name}</p>
-                    <p class="text-[9px] text-slate-500 font-bold uppercase">${s.batch} | ${s.cls}</p>
-                    <p class="text-[8px] text-indigo-400 font-black mt-1 uppercase italic">Joined: ${s.date || 'N/A'}</p>
-                </div>
-                <div class="flex gap-2">
-                    <a href="tel:${s.phone}" class="w-8 h-8 nexa-glass flex items-center justify-center text-blue-400 text-[10px]"><i class="fas fa-phone-alt"></i></a>
-                    <button onclick="delSt(${s.id})" class="w-8 h-8 nexa-glass flex items-center justify-center text-red-500 text-[10px]"><i class="fas fa-trash-alt"></i></button>
-                </div>
+        const q=document.getElementById("hSearch").value.toLowerCase();
+        const filt=students.filter(s=>s.name.toLowerCase().includes(q) || s.batch.toLowerCase().includes(q) || s.cls.toLowerCase().includes(q));
+        document.getElementById("hList").innerHTML = filt.map(s=>`
+            <div class="nexa-glass p-5 flex justify-between items-center border-l-4 border-indigo-500 shadow-sm">
+                <div><p class="font-black text-sm uppercase">${s.name}</p><p class="text-[9px] text-slate-500 font-bold uppercase">${s.batch} | ${s.cls}</p><p class="text-[8px] text-indigo-400 font-black mt-1">Joined: ${s.date || 'N/A'}</p></div>
+                <div class="flex gap-2"><a href="tel:${s.phone}" class="w-8 h-8 nexa-glass flex items-center justify-center text-blue-400 text-[10px]"><i class="fas fa-phone-alt"></i></a><button onclick="delSt(${s.id})" class="w-8 h-8 nexa-glass flex items-center justify-center text-red-500 text-[10px]"><i class="fas fa-trash"></i></button></div>
             </div>`).join("");
     }
 
     function saveStudent() {
-        const s = { 
-            id: Date.now(), 
-            name: document.getElementById("inN").value, 
-            batch: document.getElementById("inB").value, 
-            cls: document.getElementById("inC").value, 
-            fee: document.getElementById("inF").value, 
-            phone: document.getElementById("inP").value, 
-            date: document.getElementById("inD").value || new Date().toISOString().split('T')[0] 
-        };
+        const s={ id:Date.now(), name:document.getElementById("inN").value, batch:document.getElementById("inB").value, cls:document.getElementById("inC").value, fee:document.getElementById("inF").value, phone:document.getElementById("inP").value, date:document.getElementById("inD").value || new Date().toISOString().split('T')[0] };
         if(!s.name || !s.phone) return alert("Fill Name & Phone!");
-        const tx = db.transaction("st", "readwrite");
-        tx.objectStore("st").add(s);
-        tx.oncomplete = () => { 
-            sync(); 
-            alert("Student Saved!"); 
-            ["inN", "inB", "inC", "inF", "inP", "inD"].forEach(id => document.getElementById(id).value = ""); 
-        };
+        const tx=db.transaction("st","readwrite"); tx.objectStore("st").add(s);
+        tx.oncomplete=()=>{ sync(); alert("Saved!"); ["inN","inB","inC","inF","inP","inD"].forEach(i=>document.getElementById(i).value=""); };
     }
 
     function loadAtt() {
-        const d = document.getElementById("atDate").value || new Date().toISOString().split('T')[0];
-        document.getElementById("atDate").value = d;
-        const q = document.getElementById("atSearch").value.toLowerCase();
-        const saved = attData[d] || [];
-        const filt = students.filter(s => s.name.toLowerCase().includes(q) || s.batch.toLowerCase().includes(q) || s.cls.toLowerCase().includes(q));
-        document.getElementById("atList").innerHTML = filt.map(s => {
-            const isP = saved.length === 0 ? true : (saved.find(x => x.id === s.id)?.status === "P");
-            return `<div class="flex justify-between items-center p-4 bg-white/5 rounded-xl mb-1 border-l-2 ${isP ? 'border-emerald-500' : 'border-red-500'}">
+        const d=document.getElementById("atDate").value || new Date().toISOString().split('T')[0];
+        document.getElementById("atDate").value=d;
+        const q=document.getElementById("atSearch").value.toLowerCase(), saved=attData[d]||[], filt=students.filter(s=>s.name.toLowerCase().includes(q)||s.batch.toLowerCase().includes(q));
+        document.getElementById("atList").innerHTML = filt.map(s=>{
+            const isP=saved.length===0?true:(saved.find(x=>x.id===s.id)?.status==="P");
+            return `<div class="flex justify-between items-center p-4 bg-white/5 rounded-xl mb-1 border-l-2 ${isP?'border-emerald-500':'border-red-500'}">
                 <div><span class="text-xs font-black uppercase">${s.name}</span><p class="text-[8px] text-slate-500 uppercase">${s.batch}</p></div>
-                <input type="checkbox" class="w-6 h-6 accent-indigo-500" data-id="${s.id}" ${isP ? 'checked' : ''}>
+                <input type="checkbox" class="w-6 h-6 accent-indigo-500" data-id="${s.id}" ${isP?'checked':''}>
             </div>`;
         }).join("");
     }
 
     function saveAtt() {
-        const d = document.getElementById("atDate").value;
-        const checks = Array.from(document.querySelectorAll("#atList input[type='checkbox']")).map(c => ({ id: Number(c.dataset.id), status: c.checked ? "P" : "A" }));
-        const tx = db.transaction("at", "readwrite");
-        tx.objectStore("at").put({ date: d, data: checks });
-        tx.oncomplete = () => { attData[d] = checks; alert("Attendance Locked!"); };
+        const d=document.getElementById("atDate").value, checks=Array.from(document.querySelectorAll("#atList input[type='checkbox']")).map(c=>({id:Number(c.dataset.id),status:c.checked?"P":"A"}));
+        const tx=db.transaction("at","readwrite"); tx.objectStore("at").put({date:d,data:checks});
+        tx.oncomplete=()=>{ attData[d]=checks; alert("Attendance Locked!"); };
     }
 
     function renderFees() {
-        const q = document.getElementById("fSearch").value.toLowerCase();
-        const filt = students.filter(s => s.name.toLowerCase().includes(q) || s.batch.toLowerCase().includes(q) || s.cls.toLowerCase().includes(q));
-        document.getElementById("fList").innerHTML = filt.map(s => `
-            <div class="nexa-glass p-4 flex justify-between items-center mb-2 shadow-lg">
+        const q=document.getElementById("fSearch").value.toLowerCase(), filt=students.filter(s=>s.name.toLowerCase().includes(q)||s.batch.toLowerCase().includes(q));
+        document.getElementById("fList").innerHTML=filt.map(s=>`
+            <div class="nexa-glass p-4 flex justify-between items-center mb-2 shadow-md">
                 <div class="flex items-center gap-3"><input type="checkbox" class="wa-sel w-5 h-5 accent-indigo-500" data-id="${s.id}"><p class="text-xs font-black uppercase">${s.name}</p></div>
                 <button onclick='genInvoice(${JSON.stringify(s)})' class="text-indigo-400 text-xl"><i class="fas fa-file-invoice-dollar"></i></button>
             </div>`).join("");
     }
 
     function genInvoice(s) {
-        const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        doc.setFillColor(31, 41, 55); doc.rect(0, 0, 210, 50, 'F');
-        doc.setTextColor(255); doc.setFontSize(22); doc.text("FEES RECEIPT", 105, 20, {align:"center"});
-        doc.setFontSize(12); doc.text("Malhotra Classes (Accounts Villa)", 105, 30, {align:"center"});
-        doc.setFontSize(8); doc.text("Burari, Delhi-110084 | Powered by Khagesh ai-nexa", 105, 38, {align:"center"});
-        doc.autoTable({ startY: 60, head: [['Description', 'Details']], body: [['Student Name', s.name.toUpperCase()], ['Batch / Subject', `${s.batch} / ${s.cls}`], ['Amount Paid', `INR ${s.fee}`], ['Date of Payment', new Date().toLocaleDateString()]], headStyles: {fillColor:[31, 41, 55]}, theme: 'grid' });
+        const { jsPDF }=window.jspdf; const doc=new jsPDF();
+        doc.setFillColor(31,41,55); doc.rect(0,0,210,45,'F');
+        doc.setTextColor(255); doc.setFontSize(22); doc.text("FEE RECEIPT",105,20,{align:"center"});
+        doc.setFontSize(10); doc.text("Malhotra Classes | Burari, Delhi-110084",105,32,{align:"center"});
+        doc.autoTable({ startY:50, head:[['Description','Details']], body:[['Student',s.name.toUpperCase()],['Batch',s.batch],['Fee Paid',`INR ${s.fee}`],['Date',new Date().toLocaleDateString()]], headStyles:{fillColor:[31,41,55]} });
         doc.save(`${s.name}_Receipt.pdf`);
     }
 
     function exportAttendanceReport() {
-        const f = document.getElementById("fromD").value, t = document.getElementById("toD").value;
-        if(!f || !t) return alert("Select Range!");
-        const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        doc.setFillColor(63, 102, 241); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255); doc.setFontSize(20); doc.text("ATTENDANCE REPORT", 105, 25, {align:"center"});
-        const rows = [];
-        Object.keys(attData).sort().forEach(date => {
-            if(date >= f && date <= t) attData[date].forEach(e => { const s = students.find(x => x.id === e.id); if(s) rows.push([date, s.name, s.batch, e.status]); });
-        });
-        doc.autoTable({ startY: 45, head: [['Date', 'Student Name', 'Batch', 'Status']], body: rows, headStyles:{fillColor:[31, 41, 55]}, theme: 'grid' });
+        const f=document.getElementById("fromD").value, t=document.getElementById("toD").value; if(!f||!t) return alert("Select Dates!");
+        const { jsPDF }=window.jspdf; const doc=new jsPDF();
+        doc.setFillColor(63,102,241); doc.rect(0,0,210,35,'F');
+        doc.setTextColor(255); doc.setFontSize(18); doc.text("ATTENDANCE REPORT",105,22,{align:"center"});
+        const rows=[]; Object.keys(attData).sort().forEach(date=>{ if(date>=f&&date<=t) attData[date].forEach(e=>{ const s=students.find(x=>x.id===e.id); if(s) rows.push([date,s.name,s.batch,e.status]); }); });
+        doc.autoTable({ startY:40, head:[['Date','Name','Batch','Status']], body:rows, headStyles:{fillColor:[31,41,55]} });
         doc.save(`Attendance_${f}_to_${t}.pdf`);
     }
 
     function waBulk() {
-        const sel = Array.from(document.querySelectorAll(".wa-sel:checked"));
-        if(!sel.length) return alert("Select students first!");
-        sel.forEach((cb, i) => { 
-            const s = students.find(x => x.id == cb.dataset.id); 
-            setTimeout(() => window.open(`https://wa.me/91${s.phone}?text=Hello ${s.name}, your fee payment of INR ${s.fee} is due at Malhotra Classes. Please clear it soon.`, '_blank'), i * 3000); 
-        });
+        const sel=Array.from(document.querySelectorAll(".wa-sel:checked")); if(!sel.length) return alert("Select Students!");
+        sel.forEach((cb,i)=>{ const s=students.find(x=>x.id==cb.dataset.id); setTimeout(()=>window.open(`https://wa.me/91${s.phone}?text=Hello ${s.name}, Fee INR ${s.fee} is pending at Malhotra Classes.`,'_blank'), i*3000); });
     }
 
-    function toggleMode() { const b = document.getElementById("bodyBody"); b.classList.toggle("dark-mode"); b.classList.toggle("light-mode"); }
-    function masterReset() { if(confirm("⚠️ This will wipe ALL student data. Proceed?")) { const tx = db.transaction(["st", "at"], "readwrite"); tx.objectStore("st").clear(); tx.objectStore("at").clear(); tx.oncomplete = () => { localStorage.clear(); location.reload(); } } }
-    function backupJSON() { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify({st:students, at:Object.keys(attData).map(k=>({date:k,data:attData[k]}))})], {type: "application/json"})); a.download = `Malhotra_Classes_Backup.json`; a.click(); }
-    function importData(input) { const r = new FileReader(); r.onload = e => { const d = JSON.parse(e.target.result); const tx = db.transaction(["st", "at"], "readwrite"); (d.st||[]).forEach(s=>tx.objectStore("st").put(s)); (d.at||[]).forEach(a=>tx.objectStore("at").put(a)); tx.oncomplete = () => { alert("Import Successful!"); location.reload(); }; }; r.readAsText(input.files[0]); }
-    function nav(t, b) { document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active-tab")); document.querySelectorAll("nav button").forEach(btn => btn.classList.replace("text-indigo-500", "text-slate-500")); document.getElementById("t-"+t).classList.add("active-tab"); b.classList.replace("text-slate-500", "text-indigo-500"); }
-    function delSt(id) { if(confirm("Delete this student?")) { const tx = db.transaction("st", "readwrite"); tx.objectStore("st").delete(id); tx.oncomplete = () => sync(); } }
+    function exportJSON() {
+        const data = JSON.stringify({st:students, at:Object.keys(attData).map(k=>({date:k,data:attData[k]}))});
+        const blob = new Blob([data], {type: "application/json"});
+        const a = document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`Malhotra_Classes_Backup_${new Date().toLocaleDateString()}.json`; a.click();
+    }
+
+    function importJSON(input) {
+        if(!input.files[0]) return;
+        const r=new FileReader(); r.onload=e=>{
+            try {
+                const d=JSON.parse(e.target.result); const tx=db.transaction(["st","at"],"readwrite");
+                (d.st||[]).forEach(s=>tx.objectStore("st").put(s)); (d.at||[]).forEach(a=>tx.objectStore("at").put(a));
+                tx.oncomplete=()=>{ alert("Import Successful!"); location.reload(); };
+            } catch(err) { alert("Invalid File!"); }
+        }; r.readAsText(input.files[0]);
+    }
+
+    function toggleTheme() { document.getElementById("mainBody").classList.toggle("dark-mode"); document.getElementById("mainBody").classList.toggle("light-mode"); }
+    function masterReset() { if(confirm("Wipe ALL data?")) { const tx=db.transaction(["st","at"],"readwrite"); tx.objectStore("st").clear(); tx.objectStore("at").clear(); tx.oncomplete=()=>{ localStorage.clear(); location.reload(); } } }
+    function nav(t,b) { document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active-tab")); document.querySelectorAll("nav button").forEach(btn=>btn.classList.replace("text-indigo-500","text-slate-500")); document.getElementById("t-"+t).classList.add("active-tab"); b.classList.replace("text-slate-500","text-indigo-500"); }
+    function delSt(id) { if(confirm("Delete student?")) { const tx=db.transaction("st","readwrite"); tx.objectStore("st").delete(id); tx.oncomplete=()=>sync(); } }
 </script>
 </body>
 </html>
