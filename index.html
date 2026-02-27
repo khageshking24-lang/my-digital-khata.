@@ -2,245 +2,109 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Nexa ERP | Malhotra Classes</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6366f1">
+    <title>NEXA RETAIL X | V51.9.4</title>
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Nexa Retail X","short_name":"NexaX","start_url":".","display":"standalone","background_color":"#f8fafc","theme_color":"#6366f1","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/9422/9422846.png","sizes":"512x512","type":"image/png"}]}'>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0b0e14; color: #fff; overflow-x: hidden; }
-        .nexa-glass { background: #151921; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; }
-        .tab-content { display: none; }
-        .active-tab { display: block; animation: slideUp 0.3s ease; }
-        input { background: #1e232d !important; border: 1px solid #2d3545 !important; color: #fff !important; padding: 12px !important; border-radius: 12px !important; width: 100%; outline: none; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .btn-gradient { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        :root{--p:#6366f1;--bg:#f8fafc;--c:#fff;--t:#1e293b}.dark{--bg:#0f172a;--c:#1e293b;--t:#f1f5f9}
+        body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--t);transition:0.2s;overflow:hidden;margin:0}
+        .glass{background:var(--c);border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.05)}
+        .tab-content{display:none;height:82vh;overflow-y:auto;padding:15px 15px 140px}
+        .active{display:block;animation:up 0.3s ease}@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .n-in{background:var(--bg)!important;border:1.2px solid #e2e8f0!important;border-radius:12px;padding:10px;color:var(--t);width:100%;font-size:13px;outline:none}
+        .btn{background:linear-gradient(135deg,#6366f1,#4338ca);color:#fff;border-radius:12px;font-weight:700;padding:12px;cursor:pointer;text-align:center;border:none;width:100%}
+        nav{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:95%;max-width:450px;display:flex;justify-content:space-around;background:var(--c);padding:10px 5px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1);z-index:100}
+        .n-btn{color:#94a3b8;font-size:10px;display:flex;flex-direction:column;align-items:center;flex:1}.n-btn.act{color:var(--p)}
+        #lockS,#mainApp{display:none}
     </style>
 </head>
-<body class="dark-mode">
-
-<div id="lockScreen" class="fixed inset-0 z-[9999] bg-[#0b0e14] flex items-center justify-center p-6 text-center">
-    <div class="nexa-glass p-8 w-full max-w-sm border-t-4 border-indigo-600 shadow-2xl">
-        <div class="w-16 h-16 bg-indigo-600/10 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500 text-2xl"><i class="fas fa-lock"></i></div>
-        <h2 class="text-2xl font-black text-white mb-1 italic">MALHOTRA CLASSES</h2>
-        <p id="secMsg" class="text-[9px] text-slate-500 mb-8 uppercase font-bold tracking-[3px]">Security Access Required</p>
-        <div class="space-y-4">
-            <input type="password" id="mKey" placeholder="License Key" class="text-center font-bold tracking-widest">
-            <button onclick="unlockApp()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs shadow-lg">Unlock System</button>
-            <div id="trialArea" class="hidden">
-                <button onclick="enterApp()" class="w-full bg-slate-800 border border-slate-700 py-4 rounded-xl font-black uppercase text-[10px] text-indigo-400 mt-2">Trial Mode</button>
-            </div>
-        </div>
-        <p class="text-[8px] text-slate-600 mt-6 uppercase font-bold">Powered by Khagesh ai-nexa</p>
+<body onload="init()">
+<div id="lockS" class="fixed inset-0 z-[999] bg-slate-100 flex flex-col items-center justify-center p-6 text-center">
+    <div class="glass p-8 w-full max-w-sm border-t-4 border-indigo-600">
+        <h2 class="text-2xl font-black text-indigo-600">NEXA RETAIL X</h2>
+        <p class="text-[9px] text-slate-400 font-bold mb-6 tracking-widest uppercase">Powered by Khagesh Nexa-System</p>
+        <div id="tStat" class="p-3 mb-4 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-[11px] uppercase">Syncing...</div>
+        <button id="contT" onclick="startApp()" class="btn hidden mb-3 text-xs">CONTINUE TRIAL</button>
+        <input type="password" id="mKey" placeholder="MASTER KEY" class="n-in text-center mb-3">
+        <button onclick="unlock()" class="btn">ACTIVATE PREMIUM</button>
+        <p class="mt-4 text-[10px] font-bold text-slate-500 uppercase">Contact Support: <span class="text-indigo-600">8882737014</span></p>
+        <p id="tamper" class="hidden text-red-600 font-bold text-[10px] mt-4 uppercase italic animate-pulse">LOCK: CONTACT KHAGESH 8882737014</p>
     </div>
 </div>
-
-<div id="appUI" class="p-4 max-w-lg mx-auto pb-40" style="display: none;">
-    <header class="py-6 flex justify-between items-center">
-        <div>
-            <h1 class="text-xl font-black text-indigo-500 italic">Malhotra Classes</h1>
-            <p class="text-[8px] text-slate-500 font-bold uppercase">Accounts Villa, Burari</p>
-        </div>
-        <div class="flex gap-2">
-            <button onclick="exportFullMasterPDF()" title="Download Full Master Report" class="w-9 h-9 nexa-glass text-indigo-400 flex items-center justify-center text-xs shadow-lg border border-indigo-500/30"><i class="fas fa-file-pdf"></i></button>
-            <button onclick="exportJSON()" class="w-9 h-9 nexa-glass text-blue-400 flex items-center justify-center text-xs"><i class="fas fa-database"></i></button>
-            <label class="w-9 h-9 nexa-glass text-emerald-400 flex items-center justify-center text-xs cursor-pointer"><i class="fas fa-upload"></i><input type="file" class="hidden" accept=".json" onchange="importJSON(this)"></label>
-            <button onclick="masterReset()" class="w-9 h-9 nexa-glass text-red-500 flex items-center justify-center text-xs"><i class="fas fa-power-off"></i></button>
-        </div>
+<div id="mainApp" class="max-w-md mx-auto relative">
+    <header class="p-4 flex justify-between items-center bg-white/50 backdrop-blur-md sticky top-0 z-50">
+        <div onclick="editB()" class="cursor-pointer flex-1"><h1 id="bn" class="text-sm font-extrabold uppercase break-words leading-tight pr-2">STORE</h1><p id="ba" class="text-[8px] font-bold text-slate-400 break-words leading-tight">ADDR</p></div>
+        <div class="flex gap-2"><button onclick="tgD()" class="w-8 h-8 glass flex items-center justify-center"><i class="fas fa-adjust"></i></button><button onclick="rst()" class="w-8 h-8 glass text-red-500 flex items-center justify-center"><i class="fas fa-sync"></i></button></div>
     </header>
-
-    <div id="t-home" class="tab-content active-tab space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-            <div class="nexa-glass p-6 text-center shadow-xl border-b-2 border-indigo-500/20"><h2 id="stCount" class="text-4xl font-black">0</h2><p class="text-[9px] text-slate-500 uppercase font-black">Total Students</p></div>
-            <div class="nexa-glass bg-indigo-600/10 p-6 text-center shadow-xl border-b-2 border-indigo-500/40"><h2 id="revCount" class="text-3xl font-black text-indigo-400">₹0</h2><p class="text-[9px] text-indigo-300/50 uppercase font-black">Total Revenue</p></div>
+    <div id="t-1" class="tab-content active">
+        <div class="glass p-4 space-y-3 mb-4">
+            <input type="text" id="bc" placeholder="Customer Name" class="n-in">
+            <input type="number" id="bp" placeholder="WhatsApp Number" class="n-in">
+            <div id="ibox" class="space-y-2">
+                <div class="grid grid-cols-12 gap-2 row"><select class="col-span-5 n-in sel" onchange="upP(this)"></select><input type="number" placeholder="Qty" class="col-span-3 n-in iq" oninput="cR()"><input type="number" placeholder="Price" class="col-span-4 n-in ip" oninput="cR()"></div>
+            </div>
+            <button onclick="addR()" class="text-[10px] font-bold text-indigo-500 uppercase">+ ADD ITEM</button>
+            <div class="flex justify-between items-center p-4 bg-indigo-50 rounded-2xl"><span class="text-xs font-bold text-indigo-700 uppercase">Total:</span><span id="gt" class="text-2xl font-black text-indigo-700">₹0</span></div>
+            <div class="flex gap-2"><select id="bst" class="w-1/3 n-in font-bold"><option>Paid</option><option>Unpaid</option></select><button onclick="genB()" class="w-2/3 btn shadow-lg uppercase">Save & Print</button></div>
         </div>
-        <div class="relative"><input type="text" id="hSearch" onkeyup="renderHome()" placeholder="Search Name, Batch, Subject..." class="pl-11 text-xs"><i class="fas fa-search absolute left-4 top-4 text-slate-600"></i></div>
-        <div id="hList" class="space-y-3"></div>
+        <div class="flex gap-2"><button onclick="exp()" class="btn bg-slate-800 text-[10px]">BACKUP</button><label class="btn bg-slate-800 text-[10px]"><input type="file" onchange="imp(event)" hidden>RESTORE</label></div>
     </div>
-
-    <div id="t-add" class="tab-content space-y-4">
-        <div class="nexa-glass p-6 space-y-3 shadow-2xl border-t-2 border-indigo-500">
-            <input type="text" id="inN" placeholder="Full Student Name">
-            <div class="grid grid-cols-2 gap-2"><input type="text" id="inB" placeholder="Batch Name"><input type="text" id="inC" placeholder="Subject"></div>
-            <div class="grid grid-cols-2 gap-2"><input type="number" id="inF" placeholder="Fee Amount"><input type="number" id="inP" placeholder="WhatsApp No"></div>
-            <div class="flex flex-col"><label class="text-[8px] text-slate-500 font-bold mb-1 uppercase">Joining Date</label><input type="date" id="inD"></div>
-            <button onclick="saveStudent()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase italic shadow-lg mt-4">Save Admission</button>
-        </div>
-    </div>
-
-    <div id="t-att" class="tab-content space-y-4">
-        <div class="nexa-glass p-5">
-            <div class="flex gap-2 mb-4"><input type="date" id="atDate" onchange="loadAtt()" class="!w-1/3 text-[10px]"><input type="text" id="atSearch" onkeyup="loadAtt()" placeholder="Search..." class="!w-2/3 text-xs"></div>
-            <div id="atList" class="space-y-2 mb-4 max-h-60 overflow-y-auto pr-1"></div>
-            <button onclick="saveAtt()" class="w-full btn-gradient py-4 rounded-xl font-black uppercase text-xs">Lock Attendance</button>
-            <hr class="border-white/5 my-6">
-            <div class="flex gap-2 mb-2"><input type="date" id="fromD" class="text-[10px]"><input type="date" id="toD" class="text-[10px]"></div>
-            <button onclick="exportAttendanceReport()" class="w-full bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 py-3 rounded-lg font-black text-[9px] uppercase">Attendance PDF</button>
-        </div>
-    </div>
-
-    <div id="t-fees" class="tab-content space-y-4">
-        <div class="nexa-glass p-5">
-            <div class="flex justify-between items-center mb-4"><h3 class="text-[10px] font-black uppercase text-indigo-400 italic">Fee Management</h3><button onclick="waBulk()" class="bg-green-600/20 text-green-500 border border-green-500/30 px-4 py-2 rounded-lg text-[8px] font-black uppercase">Bulk WhatsApp</button></div>
-            <input type="text" id="fSearch" onkeyup="renderFees()" placeholder="Search Students..." class="text-xs mb-4">
-            <div id="fList" class="space-y-2"></div>
-        </div>
-    </div>
-
-    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] nexa-glass p-2 flex justify-around shadow-2xl z-50 backdrop-blur-xl border-white/10">
-        <button onclick="nav('home', this)" class="p-4 text-indigo-500"><i class="fas fa-home"></i></button>
-        <button onclick="nav('add', this)" class="p-4 text-slate-500"><i class="fas fa-user-plus"></i></button>
-        <button onclick="nav('att', this)" class="p-4 text-slate-500"><i class="fas fa-calendar-check"></i></button>
-        <button onclick="nav('fees', this)" class="p-4 text-slate-500"><i class="fas fa-receipt"></i></button>
-    </nav>
+    <div id="t-2" class="tab-content" onscroll="vSc(this,'hlist')"><div class="flex gap-2 mb-4"><input type="text" id="hs" onkeyup="reH(true)" placeholder="Search Sales..." class="n-in"><button onclick="rep('Sales')" class="btn px-4 w-auto"><i class="fas fa-file-pdf"></i></button></div><div id="hlist" class="space-y-3"></div></div>
+    <div id="t-3" class="tab-content" onscroll="vSc(this,'slist')"><div class="glass p-4 mb-4 space-y-2"><input type="text" id="in-n" placeholder="Item Name" class="n-in"><div class="grid grid-cols-2 gap-2"><input type="number" id="in-q" placeholder="Qty" class="n-in"><input type="number" id="in-cp" placeholder="CP" class="n-in"></div><button onclick="addS()" class="btn">STOCK+</button></div><div class="flex gap-2 mb-4"><input type="text" id="ss" onkeyup="reS(true)" placeholder="Search..." class="n-in"><button onclick="rep('Stock')" class="btn px-4 w-auto"><i class="fas fa-download"></i></button></div><div id="slist" class="space-y-2"></div></div>
+    <div id="t-4" class="tab-content"><div class="glass p-5 bg-red-50 mb-4 flex justify-between items-center"><div><p class="text-[10px] font-bold text-red-400 uppercase">UDHAAR</p><h2 id="tu" class="text-xl font-black text-red-600">₹0</h2></div><button onclick="rep('Udhaar')" class="btn bg-red-600 w-auto px-4 text-xs">PDF</button></div><div id="klist" class="space-y-2"></div></div>
+    <div id="t-5" class="tab-content"><div class="grid grid-cols-2 gap-2 mb-4"><div class="glass p-4 bg-blue-50 text-center"><p class="text-[8px] font-bold text-blue-400 uppercase">Total Sales</p><h2 id="tsale" class="text-lg font-black text-blue-600">₹0</h2></div><div class="glass p-4 bg-emerald-50 text-center"><p class="text-[8px] font-bold text-emerald-400 uppercase">Profit</p><h2 id="tp" class="text-lg font-black text-emerald-600">₹0</h2></div></div><div class="glass p-4 mb-4 space-y-2"><input type="text" id="ex-n" placeholder="Title" class="n-in"><input type="number" id="ex-a" placeholder="Amt" class="n-in"><button onclick="addE()" class="btn bg-slate-800 uppercase">Add Expense</button></div><div id="elist" class="space-y-2"></div></div>
+    <nav><div onclick="nv(1,this)" class="n-btn act"><i class="fas fa-plus mb-1 text-lg"></i><span>BILL</span></div><div onclick="nv(2,this)" class="n-btn"><i class="fas fa-history mb-1 text-lg"></i><span>SALES</span></div><div onclick="nv(3,this)" class="n-btn"><i class="fas fa-boxes mb-1 text-lg"></i><span>STOCK</span></div><div onclick="nv(4,this)" class="n-btn"><i class="fas fa-user-clock mb-1 text-lg"></i><span>UDHAAR</span></div><div onclick="nv(5,this)" class="n-btn"><i class="fas fa-wallet mb-1 text-lg"></i><span>PROFIT</span></div></nav>
 </div>
-
 <script>
-    const M_KEY = "Permanentkey63793119";
-    const C_NAME = "MALHOTRA CLASSES (ACCOUNTS VILLA)";
-    const C_ADDR = "Sant Nagar, Burari, Delhi-110084";
-    let db, students = [], attData = {};
-
-    function unlockApp() {
-        if(document.getElementById("mKey").value.trim() === M_KEY) { localStorage.setItem("nexa_auth_status", "premium"); enterApp(); }
-        else alert("🚫 Invalid Key!");
+    const K="Permanentkey63793119";let db,sales=[],stock=[],exps=[],cfg=JSON.parse(localStorage.getItem("nx_cfg"))||{name:"RETAIL X",addr:"India"};
+    let vCount={hlist:20,slist:20};
+    async function init(){
+        let sd=localStorage.getItem("nx_sd")||Date.now();localStorage.setItem("nx_sd",sd);
+        let lt=parseInt(localStorage.getItem("nx_lt"))||0,now=Date.now();
+        if(now<lt-10000){document.getElementById("lockS").style.display="flex";document.getElementById("tamper").classList.remove("hidden");document.getElementById("tStat").innerText="LOCKED";return}
+        localStorage.setItem("nx_lt",now);
+        let d=Math.floor((now-sd)/86400000);
+        if(localStorage.getItem("nx_pro")==="true")startApp();
+        else if(d>=7){document.getElementById("lockS").style.display="flex";document.getElementById("tStat").innerText="TRIAL EXPIRED";document.getElementById("tamper").classList.remove("hidden")}
+        else{document.getElementById("lockS").style.display="flex";document.getElementById("tStat").innerText=`TRIAL: ${7-d} DAYS`;document.getElementById("contT").classList.remove("hidden")}
     }
-
-    window.onload = () => {
-        const now = Date.now(), savedStart = Number(localStorage.getItem("nexa_start_ts")), lastSeen = Number(localStorage.getItem("nexa_last_seen")) || now;
-        if(now < lastSeen && !localStorage.getItem("nexa_auth_status")) localStorage.setItem("nexa_tampered", "true");
-        localStorage.setItem("nexa_last_seen", now);
-        if(!savedStart) localStorage.setItem("nexa_start_ts", now);
-        const trialDays = Math.floor((now - (savedStart || now)) / 86400000), isTampered = localStorage.getItem("nexa_tampered") === "true";
-        if(localStorage.getItem("nexa_auth_status") === "premium") enterApp();
-        else if(trialDays >= 7 || isTampered) { document.getElementById("secMsg").innerText = isTampered ? "SECURITY LOCK" : "EXPIRED"; document.getElementById("secMsg").style.color="#f00"; }
-        else { document.getElementById("secMsg").innerText = `TRIAL: ${7-trialDays} DAYS LEFT`; document.getElementById("trialArea").classList.remove("hidden"); }
-    };
-
-    function enterApp() { document.getElementById("lockScreen").style.display="none"; document.getElementById("appUI").style.display="block"; initDB(); }
-
-    function initDB() {
-        const req = indexedDB.open("MalhotraMaster_DB", 1);
-        req.onupgradeneeded = e => { db=e.target.result; db.createObjectStore("st",{keyPath:"id"}); db.createObjectStore("at",{keyPath:"date"}); };
-        req.onsuccess = e => { db=e.target.result; sync(); if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); };
-    }
-
-    function sync() {
-        const tx = db.transaction(["st","at"],"readonly");
-        tx.objectStore("st").getAll().onsuccess = e => { students=e.target.result; updateUI(); };
-        tx.objectStore("at").getAll().onsuccess = e => { e.target.result.forEach(r => attData[r.date]=r.data); loadAtt(); };
-    }
-
-    function updateUI() {
-        let rev=0; students.forEach(s=>rev+=Number(s.fee));
-        document.getElementById("stCount").innerText=students.length;
-        document.getElementById("revCount").innerText=`₹${rev}`;
-        renderHome(); renderFees();
-    }
-
-    function renderHome() {
-        const q=document.getElementById("hSearch").value.toLowerCase();
-        const filt=students.filter(s=>s.name.toLowerCase().includes(q) || s.batch.toLowerCase().includes(q));
-        document.getElementById("hList").innerHTML = filt.map(s=>`
-            <div class="nexa-glass p-5 flex justify-between items-center border-l-4 border-indigo-500 shadow-lg">
-                <div><p class="font-black text-sm uppercase italic">${s.name}</p><p class="text-[9px] text-slate-500 font-bold uppercase">${s.batch} | ${s.cls}</p><p class="text-[8px] text-indigo-400 font-black mt-1">Joined: ${s.date || 'N/A'}</p></div>
-                <div class="flex gap-2"><a href="tel:${s.phone}" class="w-8 h-8 nexa-glass flex items-center justify-center text-blue-400 text-[10px]"><i class="fas fa-phone-alt"></i></a><button onclick="delSt(${s.id})" class="w-8 h-8 nexa-glass flex items-center justify-center text-red-500 text-[10px]"><i class="fas fa-trash"></i></button></div>
-            </div>`).join("");
-    }
-
-    function saveStudent() {
-        const s={ id:Date.now(), name:document.getElementById("inN").value, batch:document.getElementById("inB").value, cls:document.getElementById("inC").value, fee:document.getElementById("inF").value, phone:document.getElementById("inP").value, date:document.getElementById("inD").value || new Date().toISOString().split('T')[0] };
-        if(!s.name || !s.phone) return alert("Fill Name & Phone!");
-        const tx=db.transaction("st","readwrite"); tx.objectStore("st").add(s);
-        tx.oncomplete=()=>{ sync(); alert("Saved!"); ["inN","inB","inC","inF","inP","inD"].forEach(i=>document.getElementById(i).value=""); };
-    }
-
-    function loadAtt() {
-        const d=document.getElementById("atDate").value || new Date().toISOString().split('T')[0], q=document.getElementById("atSearch").value.toLowerCase(), saved=attData[d]||[], filt=students.filter(s=>s.name.toLowerCase().includes(q)||s.batch.toLowerCase().includes(q));
-        document.getElementById("atList").innerHTML = filt.map(s=>{
-            const isP=saved.length===0?true:(saved.find(x=>x.id===s.id)?.status==="P");
-            return `<div class="flex justify-between items-center p-4 bg-white/5 rounded-xl mb-1 border-l-2 ${isP?'border-emerald-500':'border-red-500'}">
-                <div><span class="text-xs font-black uppercase">${s.name}</span><p class="text-[8px] text-slate-500 uppercase">${s.batch}</p></div>
-                <input type="checkbox" class="w-6 h-6 accent-indigo-500" data-id="${s.id}" ${isP?'checked':''}>
-            </div>`;
-        }).join("");
-    }
-
-    function saveAtt() {
-        const d=document.getElementById("atDate").value, checks=Array.from(document.querySelectorAll("#atList input[type='checkbox']")).map(c=>({id:Number(c.dataset.id),status:c.checked?"P":"A"}));
-        const tx=db.transaction("at","readwrite"); tx.objectStore("at").put({date:d,data:checks});
-        tx.oncomplete=()=>{ attData[d]=checks; alert("Attendance Saved!"); };
-    }
-
-    function renderFees() {
-        const q=document.getElementById("fSearch").value.toLowerCase(), filt=students.filter(s=>s.name.toLowerCase().includes(q)||s.batch.toLowerCase().includes(q));
-        document.getElementById("fList").innerHTML=filt.map(s=>`
-            <div class="nexa-glass p-4 flex justify-between items-center mb-2 shadow-md">
-                <div class="flex items-center gap-3"><input type="checkbox" class="wa-sel w-5 h-5 accent-indigo-500" data-id="${s.id}"><p class="text-xs font-black uppercase">${s.name}</p></div>
-                <button onclick='genInvoice(${JSON.stringify(s)})' class="text-indigo-400 text-xl"><i class="fas fa-file-invoice-dollar"></i></button>
-            </div>`).join("");
-    }
-
-    // 🏆 MASTER DATA PDF EXPORT (SUNDAR VERSION)
-    function exportFullMasterPDF() {
-        if(students.length === 0) return alert("No student data to export!");
-        const { jsPDF }=window.jspdf; const doc=new jsPDF();
-        doc.setFillColor(63, 81, 181); doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255); doc.setFontSize(24); doc.text("MASTER STUDENT DIRECTORY", 105, 20, {align:"center"});
-        doc.setFontSize(10); doc.text(C_NAME, 105, 30, {align:"center"});
-        doc.text(C_ADDR, 105, 36, {align:"center"});
-        const rows = students.map(s => [s.name.toUpperCase(), s.batch, s.cls, `INR ${s.fee}`, s.phone, s.date || 'N/A']);
-        doc.autoTable({ startY: 45, head: [['NAME', 'BATCH', 'SUBJECT', 'FEE', 'PHONE', 'JOINED']], body: rows, headStyles:{fillColor:[45, 55, 72]}, theme: 'grid', styles: {fontSize: 8} });
-        doc.setFontSize(8); doc.setTextColor(150); doc.text(`Generated by Khagesh ai-nexa | Total Students: ${students.length}`, 105, doc.lastAutoTable.finalY + 10, {align:"center"});
-        doc.save(`Malhotra_Classes_Master_Report.pdf`);
-    }
-
-    function genInvoice(s) {
-        const { jsPDF }=window.jspdf; const doc=new jsPDF();
-        doc.setFillColor(31,41,55); doc.rect(0,0,210,45,'F');
-        doc.setTextColor(255); doc.setFontSize(20); doc.text("FEE RECEIPT",105,20,{align:"center"});
-        doc.setFontSize(10); doc.text(C_NAME,105,30,{align:"center"});
-        doc.text(C_ADDR,105,36,{align:"center"});
-        doc.autoTable({ startY:50, head:[['Description','Details']], body:[['Student',s.name.toUpperCase()],['Batch',s.batch],['Fee Paid',`INR ${s.fee}`],['Date',new Date().toLocaleDateString()]], headStyles:{fillColor:[31,41,55]}, theme:'grid' });
-        doc.save(`${s.name}_Receipt.pdf`);
-    }
-
-    function exportAttendanceReport() {
-        const f=document.getElementById("fromD").value, t=document.getElementById("toD").value; if(!f||!t) return alert("Select Range!");
-        const { jsPDF }=window.jspdf; const doc=new jsPDF();
-        doc.setFillColor(63,102,241); doc.rect(0,0,210,35,'F');
-        doc.setTextColor(255); doc.setFontSize(18); doc.text("ATTENDANCE REPORT",105,15,{align:"center"});
-        doc.setFontSize(8); doc.text(C_NAME, 105, 25, {align:"center"});
-        const rows=[]; Object.keys(attData).sort().forEach(date=>{ if(date>=f&&date<=t) attData[date].forEach(e=>{ const s=students.find(x=>x.id===e.id); if(s) rows.push([date,s.name,s.batch,e.status]); }); });
-        doc.autoTable({ startY:40, head:[['Date','Name','Batch','Status']], body:rows, headStyles:{fillColor:[31,41,55]} });
-        doc.save(`Attendance_Report.pdf`);
-    }
-
-    function waBulk() {
-        const sel=Array.from(document.querySelectorAll(".wa-sel:checked")); if(!sel.length) return alert("Select Students!");
-        sel.forEach((cb,i)=>{ const s=students.find(x=>x.id==cb.dataset.id); setTimeout(()=>window.open(`https://wa.me/91${s.phone}?text=Hello ${s.name}, Fee INR ${s.fee} is pending at ${C_NAME}.`,'_blank'), i*3000); });
-    }
-
-    function exportJSON() {
-        const data = JSON.stringify({st:students, at:Object.keys(attData).map(k=>({date:k,data:attData[k]}))});
-        const a = document.createElement("a"); a.href=URL.createObjectURL(new Blob([data], {type: "application/json"})); a.download=`Malhotra_Backup.json`; a.click();
-    }
-
-    function importJSON(input) {
-        const r=new FileReader(); r.onload=e=>{
-            try {
-                const d=JSON.parse(e.target.result); const tx=db.transaction(["st","at"],"readwrite");
-                (d.st||[]).forEach(s=>tx.objectStore("st").put(s)); (d.at||[]).forEach(a=>tx.objectStore("at").put(a));
-                tx.oncomplete=()=>{ alert("Import Successful!"); location.reload(); };
-            } catch(err) { alert("Invalid File!"); }
-        }; r.readAsText(input.files[0]);
-    }
-
-    function masterReset() { if(confirm("Wipe ALL data?")) { const tx=db.transaction(["st","at"],"readwrite"); tx.objectStore("st").clear(); tx.objectStore("at").clear(); tx.oncomplete=()=>{ localStorage.clear(); location.reload(); } } }
-    function nav(t,b) { document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active-tab")); document.querySelectorAll("nav button").forEach(btn=>btn.classList.replace("text-indigo-500","text-slate-500")); document.getElementById("t-"+t).classList.add("active-tab"); b.classList.replace("text-slate-500","text-indigo-500"); }
-    function delSt(id) { if(confirm("Delete student?")) { const tx=db.transaction("st","readwrite"); tx.objectStore("st").delete(id); tx.oncomplete=()=>sync(); } }
+    function startApp(){document.getElementById("lockS").remove();document.getElementById("mainApp").style.display="block";document.getElementById("bn").innerText=cfg.name;document.getElementById("ba").innerText=cfg.addr;dbI()}
+    function unlock(){if(document.getElementById("mKey").value===K){localStorage.setItem("nx_pro","true");location.reload()}else alert("WRONG KEY! CALL 8882737014")}
+    function dbI(){let r=indexedDB.open("NX_RETAIL_FINAL",1);r.onupgradeneeded=e=>{let d=e.target.result;d.createObjectStore("bills",{keyPath:"id"});d.createObjectStore("stock",{keyPath:"name"});d.createObjectStore("exps",{keyPath:"id"})};r.onsuccess=e=>{db=e.target.result;sy()}}
+    function sy(){let t=db.transaction(["bills","stock","exps"],"readonly");t.objectStore("bills").getAll().onsuccess=e=>{sales=e.target.result;reH();reK();upStat()};t.objectStore("stock").getAll().onsuccess=e=>{stock=e.target.result;reS();reSl()};t.objectStore("exps").getAll().onsuccess=e=>{exps=e.target.result;reE();upStat()}}
+    function vSc(el,t){if(el.scrollTop+el.clientHeight>=el.scrollHeight-50){vCount[t]+=20;t==='hlist'?reH():reS()}}
+    function reH(r=false){if(r)vCount.hlist=20;let q=document.getElementById("hs").value.toLowerCase(),f=sales.filter(x=>x.customer.toLowerCase().includes(q)).reverse();document.getElementById("hlist").innerHTML=f.slice(0,vCount.hlist).map(b=>`<div class="glass p-3 flex justify-between items-center border-l-4 ${b.status==='Paid'?'border-indigo-500':'border-red-500'}"><div><h4 class="text-xs font-bold uppercase">${b.customer}</h4><p class="text-[9px] text-slate-400">${b.date} • ₹${b.total}</p></div><div class="flex gap-4 text-indigo-500"><i onclick='prB(${JSON.stringify(b)})' class="fas fa-print"></i><i onclick="dlB(${b.id},'bills')" class="fas fa-trash text-red-200"></i></div></div>`).join("")}
+    function reK(){document.getElementById("klist").innerHTML=sales.filter(x=>x.status==="Unpaid").map(b=>`<div class="glass p-3 flex justify-between items-center"><div><h4 class="text-xs font-bold uppercase">${b.customer}</h4><p class="text-[9px] text-red-500 font-black">₹${b.total}</p></div><div class="flex gap-2"><a href="tel:${b.phone}" class="w-8 h-8 flex items-center justify-center bg-blue-50 text-blue-500 rounded-full"><i class="fas fa-phone-alt text-[10px]"></i></a><a href="https://wa.me/91${b.phone}?text=Due: Rs ${b.total}" class="w-8 h-8 flex items-center justify-center bg-green-50 text-green-500 rounded-full"><i class="fab fa-whatsapp"></i></a><button onclick="edS(${b.id})" class="btn text-[8px] px-2 py-1 w-auto uppercase">Paid</button></div></div>`).join("")}
+    function reS(r=false){if(r)vCount.slist=20;let q=document.getElementById("ss").value.toLowerCase(),f=stock.filter(x=>x.name.toLowerCase().includes(q));document.getElementById("slist").innerHTML=f.slice(0,vCount.slist).map(s=>`<div class="glass p-3 flex justify-between items-center ${s.qty<5?'bg-red-50':''}"><div><h4 class="text-xs font-bold uppercase">${s.name}</h4><p class="text-[9px] ${s.qty<5?'text-red-600':''}">Qty: ${s.qty} | CP: ${s.cp}</p></div><div class="flex items-center gap-3"><button onclick="edP('${s.name}')" class="font-black text-indigo-600 text-xs">₹${s.price}</button><i onclick="dlB('${s.name}','stock')" class="fas fa-trash-alt text-red-200 text-xs"></i></div></div>`).join("")}
+    function addS(){let n=document.getElementById("in-n").value.toUpperCase(),q=parseInt(document.getElementById("in-q").value),cp=parseFloat(document.getElementById("in-cp").value);if(!n||isNaN(q))return;let i=stock.find(s=>s.name===n)||{name:n,qty:0,price:0,cp:0};i.qty+=q;i.cp=cp;db.transaction("stock","readwrite").objectStore("stock").put(i).onsuccess=()=>sy()}
+    function reE(){document.getElementById("elist").innerHTML=exps.filter(e=>!e.paid).reverse().map(e=>`<div class="glass p-3 flex justify-between items-center"><div><h4 class="text-xs font-bold">${e.n}</h4><p class="text-[9px] text-slate-400">₹${e.a} • ${e.d}</p></div><button onclick="clrE(${e.id})" class="btn bg-emerald-500 text-[8px] px-3 py-1 w-auto">SETTLE</button></div>`).join("")}
+    function addE(){let n=document.getElementById("ex-n").value,a=parseFloat(document.getElementById("ex-a").value);if(!n||isNaN(a))return;db.transaction("exps","readwrite").objectStore("exps").add({id:Date.now(),n,a,d:new Date().toLocaleDateString(),paid:false}).onsuccess=()=>sy()}
+    function clrE(id){let e=exps.find(x=>x.id===id);e.paid=true;db.transaction("exps","readwrite").objectStore("exps").put(e).onsuccess=()=>sy()}
+    function genB(){let c=document.getElementById("bc").value,p=document.getElementById("bp").value,its=[],tot=0;document.querySelectorAll(".row").forEach(r=>{let n=r.querySelector(".sel").value,q=parseInt(r.querySelector(".iq").value),pr=parseFloat(r.querySelector(".ip").value);if(n&&q){let s=stock.find(x=>x.name===n);its.push({n,q,p:pr,cp:s?s.cp:0});tot+=(q*pr);if(s){s.qty-=q;db.transaction("stock","readwrite").objectStore("stock").put(s)}}});if(!c||!its.length)return alert("Empty");let b={id:Date.now(),customer:c,phone:p,items:its,total:tot,status:document.getElementById("bst").value,date:new Date().toLocaleDateString()};db.transaction("bills","readwrite").objectStore("bills").add(b).onsuccess=()=>{sy();prB(b);resF();nv(2,document.querySelectorAll(".n-btn")[1])}}
+    function rep(t){const{jsPDF}=window.jspdf;let d=new jsPDF(),h,b;d.setFillColor(30,41,59);d.rect(0,0,210,40,'F');d.setTextColor(255);d.setFontSize(22);d.text(cfg.name,105,18,{align:'center'});d.setFontSize(9);d.text(cfg.addr,105,25,{align:'center'});d.text(`${t.toUpperCase()} REPORT`,105,32,{align:'center'});if(t==='Sales'){h=[['Customer','Phone','Profit','Total']];b=sales.map(x=>[x.customer,x.phone,`Rs ${x.items.reduce((acc,i)=>acc+(i.q*(i.p-i.cp)),0)}`,`Rs ${x.total}`])}else if(t==='Stock'){h=[['Product','Qty','Cost','Price','Value']];b=stock.map(s=>[s.name,s.qty,s.cp,s.price,s.qty*s.price])}else{h=[['Customer','Phone','Total Due']];b=sales.filter(x=>x.status==='Unpaid').map(x=>[x.customer,x.phone,x.total])}d.autoTable({startY:45,head:h,body:b,headStyles:{fillColor:[99,102,241]},styles:{fontSize:7,halign:'center'}});d.save(`${t}_Report.pdf`)}
+    function prB(b){const{jsPDF}=window.jspdf;let d=new jsPDF({unit:'mm',format:[80,150]});d.setFontSize(14);d.text(cfg.name,40,10,{align:"center"});d.setFontSize(6);d.text(cfg.addr,40,14,{align:"center"});d.autoTable({startY:22,margin:5,head:[['Item','Qty','Price']],body:b.items.map(i=>[i.n,i.q,i.q*i.p]),styles:{fontSize:6},headStyles:{halign:'center'}});d.text(`Total: Rs ${b.total}`,40,d.lastAutoTable.finalY+5,{align:"center"});d.save(`Bill_${b.id}.pdf`)}
+    function upStat(){let rev=sales.reduce((s,x)=>s+x.total,0),gp=sales.reduce((acc,b)=>acc+b.items.reduce((iA,i)=>iA+(i.q*(i.p-i.cp)),0),0),pe=exps.filter(e=>e.paid).reduce((s,x)=>s+x.a,0);document.getElementById("tsale").innerText="₹"+rev;document.getElementById("tp").innerText="₹"+(gp-pe);document.getElementById("tu").innerText="₹"+sales.filter(x=>x.status==="Unpaid").reduce((s,x)=>s+x.total,0)}
+    function dlB(id,st){if(confirm("Delete?"))db.transaction(st,"readwrite").objectStore(st).delete(id).onsuccess=()=>sy()}
+    function nv(i,b){document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));document.getElementById("t-"+i).classList.add("active");document.querySelectorAll(".n-btn").forEach(x=>x.classList.remove("act"));b.classList.add("act")}
+    function tgD(){document.body.classList.toggle("dark")}
+    function resF(){document.getElementById("bc").value="";document.getElementById("bp").value="";document.getElementById("gt").innerText="₹0";document.getElementById("ibox").innerHTML=`<div class="grid grid-cols-12 gap-2 row"><select class="col-span-5 n-in sel" onchange="upP(this)"></select><input type="number" placeholder="Qty" class="col-span-3 n-in iq" oninput="cR()"><input type="number" placeholder="Price" class="col-span-4 n-in ip" oninput="cR()"></div>`;reSl()}
+    function reSl(){let h='<option value="">Item</option>'+stock.map(s=>`<option value="${s.name}">${s.name}</option>`).join("");document.querySelectorAll(".sel").forEach(s=>{if(!s.value)s.innerHTML=h})}
+    function upP(s){let r=s.closest(".row"),i=stock.find(x=>x.name===s.value);if(i)r.querySelector(".ip").value=i.price;cR()}
+    function addR(){let d=document.createElement('div');d.className="grid grid-cols-12 gap-2 row mt-2";d.innerHTML=`<select class="col-span-5 n-in sel" onchange="upP(this)">${document.querySelector(".sel").innerHTML}</select><input type="number" placeholder="Qty" class="col-span-3 n-in iq" oninput="cR()"><input type="number" placeholder="Price" class="col-span-4 n-in ip" oninput="cR()">`;document.getElementById("ibox").appendChild(d)}
+    function cR(){let t=0;document.querySelectorAll(".row").forEach(r=>{let q=r.querySelector(".iq").value,p=r.querySelector(".ip").value;if(q&&p)t+=(q*p)});document.getElementById("gt").innerText="₹"+t}
+    function edP(n){let p=prompt("MRP?");if(p){let i=stock.find(x=>x.name===n);i.price=parseFloat(p);db.transaction("stock","readwrite").objectStore("stock").put(i).onsuccess=()=>sy()}}
+    function edS(id){let b=sales.find(x=>x.id===id);b.status='Paid';db.transaction("bills","readwrite").objectStore("bills").put(b).onsuccess=()=>sy()}
+    function editB(){let n=prompt("Name?",cfg.name),a=prompt("Addr?",cfg.addr);if(n){cfg={name:n,addr:a};localStorage.setItem("nx_cfg",JSON.stringify(cfg));location.reload()}}
+    function exp(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify({sales,stock,exps,cfg})],{type:"application/json"}));a.download="RetailX_Backup.json";a.click()}
+    function imp(e){let r=new FileReader();r.onload=ev=>{let d=JSON.parse(ev.target.result);let tx=db.transaction(["bills","stock","exps"],"readwrite");d.sales.forEach(s=>tx.objectStore("bills").put(s));d.stock.forEach(s=>tx.objectStore("stock").put(s));if(d.exps)d.exps.forEach(ex=>tx.objectStore("exps").put(ex));tx.oncomplete=()=>location.reload()};r.readAsText(e.target.files[0])}
+    function rst(){if(confirm("Reset?")){indexedDB.deleteDatabase("NX_RETAIL_FINAL");localStorage.clear();location.reload()}}
 </script>
 </body>
 </html>
